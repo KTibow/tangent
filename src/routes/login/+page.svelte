@@ -1,1 +1,1 @@
-<p>TODO: logging in</p>
+<p style:margin="auto">TODO: logging in</p>

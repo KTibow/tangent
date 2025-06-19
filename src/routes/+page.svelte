@@ -1,1 +1,1 @@
-<p>TODO: Tangent as a computer</p>
+<p style:margin="auto">TODO: Tangent as a computer</p>
