@@ -1,14 +1,13 @@
 <script>
-  import { Button } from "m3-svelte";
   import TangentContainer from "$lib/TangentContainer.svelte";
   import EmailInput from "./EmailInput.svelte";
 </script>
 
 <!-- TODO: switch to further parts if email is known -->
+<!-- TODO: "continue with Tangent" by default but allow setting up different storage -->
 <div class="login">
   <TangentContainer contract>
     <EmailInput />
-    <Button variant="outlined" href="/login/byoi">Advanced: bring your own identity</Button>
   </TangentContainer>
 </div>
 
