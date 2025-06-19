@@ -1,11 +1,12 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  let { children }: { children: Snippet } = $props();
+  let { children, contract = false }: { children: Snippet; contract?: boolean } = $props();
 
-  let innerWidth = $state(0);
+  let width = $state(0);
   let innerHeight = $state(0);
-  let r = $derived(innerHeight);
+  let height = $derived(contract ? 0.9 * innerHeight : innerHeight);
+  let r = $derived(height);
   let cx = $derived(r * -0.5);
   let cy = $derived(r * 0.4);
 
@@ -23,16 +24,16 @@
 </script>
 
 <svelte:window
-  bind:innerWidth
+  bind:innerWidth={width}
   bind:innerHeight
   onmousemove={(e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+    mouseX = e.pageX;
+    mouseY = e.pageY;
   }}
 />
 
-{#if margin + 600 < innerWidth}
-  <svg width={innerWidth} height={innerHeight} fill="none">
+{#if margin + 600 < width}
+  <svg {width} {height} fill="none">
     <circle
       {cx}
       {cy}
@@ -49,7 +50,7 @@
       stroke-width="8"
     />
   </svg>
-  <div class="container" style:margin-left="{margin}px">
+  <div class="container fixed-width" style:width="{Math.min(width - margin, 600)}px">
     {@render children()}
   </div>
 {:else}
@@ -60,13 +61,18 @@
 
 <style>
   svg {
-    position: fixed;
-    inset: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
     z-index: -1;
   }
   .container {
     display: flex;
     flex-direction: column;
-    margin-block: auto;
+    flex-grow: 1;
+
+    &.fixed-width {
+      align-self: end;
+    }
   }
 </style>

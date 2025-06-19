@@ -160,5 +160,11 @@ body {
   flex-direction: column;
   margin: 0;
   height: 100dvh;
+  box-sizing: border-box;
   overflow: clip auto;
+}
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.2s;
 }
