@@ -1,0 +1,164 @@
+@import url("./tailwind-reset.css");
+@import url("m3-svelte/misc/styles.css");
+@import url("m3-svelte/misc/recommended-styles.css");
+
+/* Material 3 */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+  }
+  :root,
+  ::backdrop {
+    --m3-scheme-background: 255 243 249;
+    --m3-scheme-on-background: 68 35 65;
+    --m3-scheme-surface: 255 243 249;
+    --m3-scheme-surface-dim: 255 193 244;
+    --m3-scheme-surface-bright: 255 243 249;
+    --m3-scheme-surface-container-lowest: 255 255 255;
+    --m3-scheme-surface-container-low: 255 235 248;
+    --m3-scheme-surface-container: 255 223 246;
+    --m3-scheme-surface-container-high: 255 215 246;
+    --m3-scheme-surface-container-highest: 255 206 245;
+    --m3-scheme-on-surface: 68 35 65;
+    --m3-scheme-on-surface-variant: 117 79 112;
+    --m3-scheme-outline: 147 106 140;
+    --m3-scheme-outline-variant: 205 159 196;
+    --m3-scheme-inverse-surface: 31 3 30;
+    --m3-scheme-inverse-on-surface: 187 143 180;
+    --m3-scheme-primary: 168 28 124;
+    --m3-scheme-primary-dim: 152 5 111;
+    --m3-scheme-on-primary: 255 239 244;
+    --m3-scheme-primary-container: 255 105 197;
+    --m3-scheme-on-primary-container: 73 0 51;
+    --m3-scheme-primary-fixed: 255 105 197;
+    --m3-scheme-primary-fixed-dim: 239 91 183;
+    --m3-scheme-on-primary-fixed: 0 0 0;
+    --m3-scheme-on-primary-fixed-variant: 90 0 64;
+    --m3-scheme-inverse-primary: 252 102 195;
+    --m3-scheme-secondary: 142 58 138;
+    --m3-scheme-secondary-dim: 128 45 125;
+    --m3-scheme-on-secondary: 255 238 248;
+    --m3-scheme-secondary-container: 255 189 244;
+    --m3-scheme-on-secondary-container: 118 36 116;
+    --m3-scheme-secondary-fixed: 255 189 244;
+    --m3-scheme-secondary-fixed-dim: 255 166 244;
+    --m3-scheme-on-secondary-fixed: 95 10 95;
+    --m3-scheme-on-secondary-fixed-variant: 129 46 126;
+    --m3-scheme-tertiary: 149 69 0;
+    --m3-scheme-tertiary-dim: 130 59 0;
+    --m3-scheme-on-tertiary: 255 240 233;
+    --m3-scheme-tertiary-container: 255 150 81;
+    --m3-scheme-on-tertiary-container: 82 35 0;
+    --m3-scheme-tertiary-fixed: 255 150 81;
+    --m3-scheme-tertiary-fixed-dim: 244 134 58;
+    --m3-scheme-on-tertiary-fixed: 44 16 0;
+    --m3-scheme-on-tertiary-fixed-variant: 96 42 0;
+    --m3-scheme-error: 180 19 64;
+    --m3-scheme-error-dim: 162 0 54;
+    --m3-scheme-on-error: 255 239 239;
+    --m3-scheme-error-container: 247 75 109;
+    --m3-scheme-on-error-container: 81 0 23;
+    --m3-scheme-on-on-primary: 167 27 124;
+    --m3-scheme-primary-container-subtle: 255 196 225;
+    --m3-scheme-on-primary-container-subtle: 141 0 103;
+    --m3-scheme-tertiary-container-subtle: 255 201 170;
+    --m3-scheme-on-tertiary-container-subtle: 120 54 0;
+    --m3-scheme-error-container-subtle: 255 198 203;
+    --m3-scheme-on-error-container-subtle: 150 0 49;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+  :root,
+  ::backdrop {
+    --m3-scheme-background: 31 3 30;
+    --m3-scheme-on-background: 255 219 246;
+    --m3-scheme-surface: 31 3 30;
+    --m3-scheme-surface-dim: 31 3 30;
+    --m3-scheme-surface-bright: 72 25 70;
+    --m3-scheme-surface-container-lowest: 0 0 0;
+    --m3-scheme-surface-container-low: 38 5 37;
+    --m3-scheme-surface-container: 47 10 46;
+    --m3-scheme-surface-container-high: 55 15 53;
+    --m3-scheme-surface-container-highest: 64 20 62;
+    --m3-scheme-on-surface: 255 219 246;
+    --m3-scheme-on-surface-variant: 177 134 170;
+    --m3-scheme-outline: 145 104 139;
+    --m3-scheme-outline-variant: 96 60 91;
+    --m3-scheme-inverse-surface: 255 247 249;
+    --m3-scheme-inverse-on-surface: 110 73 105;
+    --m3-scheme-primary: 255 132 204;
+    --m3-scheme-primary-dim: 252 102 195;
+    --m3-scheme-on-primary: 94 0 67;
+    --m3-scheme-primary-container: 255 105 197;
+    --m3-scheme-on-primary-container: 73 0 51;
+    --m3-scheme-primary-fixed: 255 105 197;
+    --m3-scheme-primary-fixed-dim: 239 91 183;
+    --m3-scheme-on-primary-fixed: 0 0 0;
+    --m3-scheme-on-primary-fixed-variant: 90 0 64;
+    --m3-scheme-inverse-primary: 172 33 128;
+    --m3-scheme-secondary: 254 156 244;
+    --m3-scheme-secondary-dim: 239 143 229;
+    --m3-scheme-on-secondary: 102 20 102;
+    --m3-scheme-secondary-container: 117 35 115;
+    --m3-scheme-on-secondary-container: 255 187 244;
+    --m3-scheme-secondary-fixed: 255 189 244;
+    --m3-scheme-secondary-fixed-dim: 255 166 244;
+    --m3-scheme-on-secondary-fixed: 95 10 95;
+    --m3-scheme-on-secondary-fixed-variant: 129 46 126;
+    --m3-scheme-tertiary: 255 158 97;
+    --m3-scheme-tertiary-dim: 251 139 63;
+    --m3-scheme-on-tertiary: 89 38 0;
+    --m3-scheme-tertiary-container: 251 139 63;
+    --m3-scheme-on-tertiary-container: 72 30 0;
+    --m3-scheme-tertiary-fixed: 255 150 81;
+    --m3-scheme-tertiary-fixed-dim: 244 134 58;
+    --m3-scheme-on-tertiary-fixed: 44 16 0;
+    --m3-scheme-on-tertiary-fixed-variant: 96 42 0;
+    --m3-scheme-error: 255 110 132;
+    --m3-scheme-error-dim: 215 51 87;
+    --m3-scheme-on-error: 73 0 19;
+    --m3-scheme-error-container: 167 1 56;
+    --m3-scheme-on-error-container: 255 178 185;
+    --m3-scheme-on-on-primary: 255 132 204;
+    --m3-scheme-primary-container-subtle: 90 0 64;
+    --m3-scheme-on-primary-container-subtle: 255 127 202;
+    --m3-scheme-tertiary-container-subtle: 75 31 0;
+    --m3-scheme-on-tertiary-container-subtle: 254 142 65;
+    --m3-scheme-error-container-subtle: 95 0 28;
+    --m3-scheme-on-error-container-subtle: 255 135 150;
+  }
+}
+/* Other styles */
+@font-face {
+  font-family: Inter Variable;
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("https://rsms.me/inter/font-files/InterVariable.woff2?v=4.1") format("woff2");
+}
+@font-face {
+  font-family: Inter Variable;
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("https://rsms.me/inter/font-files/InterVariable-Italic.woff2?v=4.1") format("woff2");
+}
+:root {
+  background-color: rgb(var(--m3-scheme-background));
+  color: rgb(var(--m3-scheme-on-background));
+  --m3-font: Inter Variable, system-ui, sans-serif;
+}
+::selection {
+  background-color: rgb(var(--m3-scheme-tertiary-container));
+  color: rgb(var(--m3-scheme-on-tertiary-container));
+}
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100dvh;
+  overflow: clip auto;
+}
