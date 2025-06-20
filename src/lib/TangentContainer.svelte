@@ -20,7 +20,7 @@
   let tangentY1 = $derived(nearestOnCircleY + Math.sin(angleToMouse + Math.PI / 2) * 10000);
   let tangentY2 = $derived(nearestOnCircleY - Math.sin(angleToMouse + Math.PI / 2) * 10000);
 
-  let margin = $derived(cx + r);
+  let hasSpace = $derived(!width || width - (cx + r) >= 600);
 </script>
 
 <svelte:window
@@ -30,9 +30,13 @@
     mouseX = e.pageX;
     mouseY = e.pageY;
   }}
+  onmouseover={(e) => {
+    mouseX = e.pageX;
+    mouseY = e.pageY;
+  }}
 />
 
-{#if margin + 600 < width}
+{#if hasSpace}
   <svg {width} {height} fill="none">
     <circle
       {cx}
@@ -50,7 +54,7 @@
       stroke-width="8"
     />
   </svg>
-  <div class="container fixed-width" style:width="{Math.min(width - margin, 600)}px">
+  <div class="container fixed-width">
     {@render children()}
   </div>
 {:else}
@@ -68,10 +72,12 @@
   }
   .container {
     display: flex;
+    align-items: center;
     flex-direction: column;
     flex-grow: 1;
 
     &.fixed-width {
+      width: 37.5rem;
       align-self: end;
     }
   }

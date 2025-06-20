@@ -53,14 +53,15 @@
   div {
     display: flex;
     position: relative;
+    width: 20rem;
   }
   input {
     height: 3rem;
     border-radius: var(--m3-util-rounding-full);
     padding: 0 1rem;
     background-color: rgb(var(--m3-scheme-surface-container-low));
-    text-align: center;
-    flex-grow: 1;
+    min-width: 0;
+    flex: 1;
   }
   .hint {
     position: absolute;

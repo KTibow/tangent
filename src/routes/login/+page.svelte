@@ -1,10 +1,35 @@
 <script>
   import { Icon } from "m3-svelte";
-  import Login from "./Login.svelte";
+  import { onMount } from "svelte";
   import { iconTangent } from "$lib/icons";
+  import TangentContainer from "$lib/TangentContainer.svelte";
+  import EmailInput from "./EmailInput.svelte";
+  import PasswordInput from "./PasswordInput.svelte";
+  import FaceInput from "./FaceInput.svelte";
+
+  let { data } = $props();
+  let hasCamera = $state(true);
+  onMount(async () => {
+    const list = await navigator.mediaDevices.enumerateDevices();
+    hasCamera = list.some((device) => device.kind == "videoinput");
+  });
+
+  let canUsePassword = $derived(data.canUsePassword);
+  let canUseFace = $derived(data.canUseFace && hasCamera);
+  let usePassword = $derived(canUsePassword);
 </script>
 
-<Login />
+<div class="login">
+  <TangentContainer contract>
+    {#if canUsePassword && usePassword}
+      <PasswordInput useFace={canUseFace ? () => (usePassword = false) : undefined} />
+    {:else if canUseFace && !usePassword}
+      <FaceInput usePassword={canUsePassword ? () => (usePassword = true) : undefined} />
+    {:else}
+      <EmailInput />
+    {/if}
+  </TangentContainer>
+</div>
 <div class="yap m3-font-headline-large">
   <div class="grid">
     <p>If the computer is</p>
@@ -26,6 +51,37 @@
 </div>
 
 <style>
+  .login {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    height: 90dvh;
+    flex: none;
+  }
+  .login :global {
+    .container > form {
+      display: flex;
+      flex-direction: column;
+      margin-block: auto;
+    }
+    .container > .stack {
+      position: relative;
+      > :first-child {
+        width: 20rem;
+        padding: 0.5rem 1rem 3.5rem 1rem;
+        background-color: rgb(var(--m3-scheme-surface-container-low));
+        border-radius: 1.5rem;
+      }
+      > :last-child {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
+    .container > a {
+      align-self: center;
+    }
+  }
   .yap {
     display: flex;
     flex-direction: column;
