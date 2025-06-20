@@ -17,6 +17,7 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.18.0",
+    "@iconify/types": "^2.0.0",
     "@ktibow/iconset-material-symbols": "^0.0.1750223537",
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "^2.16.0",
@@ -27,6 +28,7 @@
     "eslint-plugin-svelte": "^3.0.0",
     "fast-xml-parser": "^5.2.5",
     "globals": "^16.0.0",
+    "kreations": "^1.2.5",
     "m3-svelte": "^4.3.3",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.3",
