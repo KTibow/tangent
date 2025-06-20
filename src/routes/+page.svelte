@@ -45,10 +45,10 @@
       console.log("route b");
       setTimeout(() => {
         if (connection == "will-connect") {
-          storageEndpoint = new URL("/s3", page.url.href).href;
-          storageBucket = "magic";
-          keyId = jwt.split(".")[1];
-          keySecret = jwt.split(".")[2];
+          storageEndpoint = "todo";
+          storageBucket = "todo";
+          keyId = "todo";
+          keySecret = "todo";
           getStorage();
         }
       }, 1000);
