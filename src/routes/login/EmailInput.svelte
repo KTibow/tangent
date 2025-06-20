@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { autofocus } from "$lib/autofocus";
   import { enhanceWithTransitions } from "$lib/enhance";
 
   let form: HTMLFormElement | undefined = $state();
@@ -28,6 +27,7 @@
   bind:this={form}
 >
   <div>
+    <!-- svelte-ignore a11y_autofocus -->
     <input
       class="focus-inset"
       type="email"
@@ -35,7 +35,7 @@
       placeholder="Email"
       required
       bind:value
-      use:autofocus
+      autofocus
       onkeydown={(e) => {
         if (e.key == "Tab" && tabbable) {
           e.preventDefault();

@@ -2,7 +2,6 @@
   import iconLogin from "@ktibow/iconset-material-symbols/login-rounded";
   import iconSelfie from "@ktibow/iconset-material-symbols/photo-camera-front-rounded";
   import { Button, Icon } from "m3-svelte";
-  import { autofocus } from "$lib/autofocus";
   import { enhanceWithTransitions } from "$lib/enhance";
 
   let { useFace }: { useFace: (() => void) | undefined } = $props();
@@ -22,15 +21,16 @@
     };
   }}
 >
+  <!-- svelte-ignore a11y_autofocus -->
   <input
     class="focus-inset"
     type="password"
     name="password"
     placeholder="Password"
     required
-    use:autofocus
+    autofocus
   />
-  <Button variant="filled" iconType="left">
+  <Button variant="filled" iconType="left" disabled={loading}>
     <Icon icon={iconLogin} />
     Log in
   </Button>

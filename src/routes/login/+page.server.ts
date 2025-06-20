@@ -1,7 +1,9 @@
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
+import { sign } from "@tsndr/cloudflare-worker-jwt";
 import districts, { type SchoolDistrict } from "school-districts";
-import type { PageServerLoad } from "./$types";
+import { JWT_KEY } from "$env/static/private";
 import studentvue from "$lib/api/studentvue";
+import type { PageServerLoad } from "./$types";
 
 const getDistrict = (email: string): SchoolDistrict | undefined => {
   const domain = email.split("@")[1];
@@ -43,9 +45,16 @@ export const actions = {
     const sv = district.apps.find((a) => a.app == "StudentVue");
     if (!sv) error(400, "District without StudentVue");
 
-    const studentInfo = await studentvue(sv.host, id, password, "ChildList");
-    const child = studentInfo.ChildList?.Child;
+    try {
+      const studentInfo = await studentvue(sv.host, id, password, "ChildList");
+      const child = studentInfo.ChildList?.Child;
+      if (!child) throw new Error("No child");
+    } catch {
+      error(400, "Invalid credentials");
+    }
 
-    // TODO: give them the JWT that will later be exchanged for storage and stuff
+    const jwt = await sign({ sub: email }, JWT_KEY);
+    cookies.set("v2-jwt", jwt, { path: "/", maxAge: 60 * 60 * 24 * 365 * 4 });
+    redirect(303, "/");
   },
 };

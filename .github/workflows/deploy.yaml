@@ -21,6 +21,8 @@ jobs:
         run: deno install
 
       - name: Build project
+        env:
+          JWT_KEY: ${{ secrets.JWT_KEY }}
         run: deno task build
 
       - name: Upload
