@@ -93,15 +93,18 @@
     max-width: 80ch;
   }
   .grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    align-self: start;
-    column-gap: 1.5rem;
+    @media (width < 100rem) {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      align-self: start;
+    }
     p,
     strong {
-      display: flex;
+      display: inline-flex;
       align-items: center;
+      vertical-align: middle;
       gap: 0.5rem;
     }
+    column-gap: 1ch;
   }
 </style>
