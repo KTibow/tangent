@@ -21,6 +21,8 @@
       triggerTimeout = 0;
     }
   });
+
+  const conditionalPull = (a: number, pull: boolean) => a + (pull ? (50 - a) * 0.5 : 0);
 </script>
 
 <svelte:window
@@ -35,7 +37,7 @@
   }}
 >
   <span
-    style:background-position-x={overviewing ? "0%" : triggerTimeout > 0 ? "60%" : "100%"}
+    style:background-position-x="{conditionalPull(overviewing ? 0 : 100, triggerTimeout > 0)}%"
     style:color="rgb(var({overviewing
       ? '--m3-scheme-on-primary-container'
       : '--m3-scheme-on-surface-variant'}))">Tangent</span
