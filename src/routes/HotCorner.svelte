@@ -1,7 +1,17 @@
 <script lang="ts">
   import { Spring } from "svelte/motion";
 
-  let { overviewing, trigger }: { overviewing: boolean; trigger: () => void } = $props();
+  let { overviewing = $bindable() }: { overviewing: boolean } = $props();
+  let openedAt = 0;
+  const trigger = () => {
+    if (overviewing) {
+      if (Date.now() - openedAt < 300) return;
+      overviewing = false;
+    } else {
+      openedAt = Date.now();
+      overviewing = true;
+    }
+  };
 
   let mouse = $state({ x: 0, y: 0 });
   let trail = new Spring({ x: 0, y: 0 }, { stiffness: 0.1, damping: 1 });
@@ -35,13 +45,19 @@
   onpointerdown={(e) => {
     if (e.button == 0) trigger();
   }}
+  onkeypress={(e) => {
+    if (e.key == " ") trigger();
+  }}
 >
   <span
     style:background-position-x="{conditionalPull(overviewing ? 0 : 100, triggerTimeout > 0)}%"
-    style:color="rgb(var({overviewing
-      ? '--m3-scheme-on-primary-container'
-      : '--m3-scheme-on-surface-variant'}))">Tangent</span
+    style:color="rgb({overviewing
+      ? 'var(--m3-scheme-on-primary-container)'
+      : 'var(--m3-scheme-on-background) / 0.8'})"
   >
+    <div class="layer"></div>
+    Tangent
+  </span>
 </button>
 
 <style>
@@ -50,11 +66,8 @@
     position: absolute;
     left: 0;
     top: 0;
-  }
-  @property --base-bg {
-    syntax: "<color>";
-    initial-value: transparent;
-    inherits: false;
+    user-select: none;
+    z-index: 1000;
   }
   span {
     display: flex;
@@ -63,20 +76,27 @@
     padding: 0 0.75rem;
     border-radius: var(--m3-util-rounding-full);
 
-    &:is(button:hover span) {
-      --base-bg: rgb(var(--m3-scheme-surface-container));
-    }
-
     background-image: linear-gradient(
       to right,
       rgb(var(--m3-scheme-primary-container)) 20%,
-      var(--base-bg) 80%
+      transparent 80%
     );
     background-size: 500% 500%;
 
     transition:
-      --base-bg var(--m3-util-easing),
       background-position var(--m3-util-easing-slow),
       color var(--m3-util-easing);
+  }
+  div {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--m3-util-easing);
+  }
+  button:hover div {
+    opacity: 0.08;
   }
 </style>
