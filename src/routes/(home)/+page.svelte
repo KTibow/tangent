@@ -58,6 +58,13 @@
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
+<svelte:head>
+  <title>Tangent</title>
+  <meta
+    name="description"
+    content="If the computer is a bicycle for the mind, Tangent is a computer for school."
+  />
+</svelte:head>
 <System bind:overviewing />
 {#each windows as window (window.id)}
   <Window

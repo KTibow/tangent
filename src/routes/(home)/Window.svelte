@@ -42,6 +42,7 @@
   onclick={overviewing ? select : undefined}
   onkeypress={(e) => overviewing && e.key == " " && select()}
   tabindex={overviewing ? 0 : -1}
+  aria-label={overviewing ? app.name : undefined}
   role={overviewing ? "button" : undefined}
   in:scaleAnimation={{ duration: 100, easing: easeEmphasizedDecel }}
   out:scaleAnimation={{ duration: 200, easing: easeEmphasizedAccel }}
@@ -59,7 +60,7 @@
     <Icon icon={app.icon} width="1.25rem" height="1.25rem" />
     <p class="title m3-font-label-large">{app.name}</p>
   </div>
-  <button onclick={close}>
+  <button onclick={close} aria-label="Close">
     <Layer />
     <Icon icon={iconClose} width="1.25rem" height="1.25rem" />
   </button>
