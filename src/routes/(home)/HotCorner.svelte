@@ -40,6 +40,11 @@
     mouse = { x: e.pageX, y: e.pageY };
   }}
 />
+<svelte:body
+  onmouseleave={(e) => {
+    mouse = { x: e.pageX, y: e.pageY };
+  }}
+/>
 <button
   class="m3-font-label-large"
   onpointerdown={(e) => {
@@ -52,7 +57,7 @@
   <span
     style:background-position-x="{conditionalPull(overviewing ? 0 : 100, triggerTimeout > 0)}%"
     style:color="rgb({overviewing
-      ? 'var(--m3-scheme-on-primary-container)'
+      ? 'var(--m3-scheme-on-primary-container-subtle)'
       : 'var(--m3-scheme-on-background) / 0.8'})"
   >
     <div class="layer"></div>
@@ -78,7 +83,7 @@
 
     background-image: linear-gradient(
       to right,
-      rgb(var(--m3-scheme-primary-container)) 20%,
+      rgb(var(--m3-scheme-primary-container-subtle)) 20%,
       transparent 80%
     );
     background-size: 500% 500%;
