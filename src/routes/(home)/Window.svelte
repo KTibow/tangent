@@ -113,6 +113,7 @@
     height: 3rem;
 
     position: absolute;
+    pointer-events: none;
     translate: -50% -50%;
     z-index: 1001;
 
@@ -134,11 +135,11 @@
     }
     > .details {
       padding-inline: 1rem;
-      pointer-events: none;
     }
     > button {
       width: 3rem;
       position: relative;
+      pointer-events: auto;
     }
   }
 </style>

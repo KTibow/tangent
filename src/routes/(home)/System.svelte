@@ -15,11 +15,6 @@
         }
       }
     : undefined}
-  onkeyup={(e) => {
-    if (e.key == "Alt") {
-      overviewing = !overviewing;
-    }
-  }}
 />
 <HotCorner bind:overviewing />
 <div class="window-surface" class:overviewing></div>

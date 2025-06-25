@@ -39,6 +39,18 @@
   onmousemove={(e) => {
     mouse = { x: e.pageX, y: e.pageY };
   }}
+  onkeyup={(e) => {
+    if (e.key == "Alt") {
+      overviewing = !overviewing;
+    }
+  }}
+  onmessage={({ data }) => {
+    if (data.type == "keyup-alt") {
+      overviewing = !overviewing;
+    } else if (data.type == "mousemove") {
+      mouse = { x: data.x, y: data.y };
+    }
+  }}
 />
 <svelte:body
   onmouseleave={(e) => {
@@ -78,7 +90,7 @@
     display: flex;
     align-items: center;
     height: 2rem;
-    padding: 0 0.75rem;
+    padding: 0 1rem;
     border-radius: var(--m3-util-rounding-full);
 
     background-image: linear-gradient(
@@ -92,16 +104,16 @@
       background-position var(--m3-util-easing-slow),
       color var(--m3-util-easing);
   }
-  div {
+  .layer {
     position: absolute;
     inset: 0;
     border-radius: inherit;
     background-color: currentColor;
     opacity: 0;
+    &:is(button:hover .layer) {
+      opacity: 0.08;
+    }
     pointer-events: none;
     transition: var(--m3-util-easing);
-  }
-  button:hover div {
-    opacity: 0.08;
   }
 </style>
