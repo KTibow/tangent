@@ -138,8 +138,8 @@ ${darkColors}
 </p>
 
 <style>
-  h2:not(:first-child) {
-    margin-top: 1rem;
+  :is(h2, div, p):not(:first-child) {
+    margin-top: 0.5em;
   }
   .controls {
     display: flex;
