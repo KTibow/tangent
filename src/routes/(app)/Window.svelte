@@ -54,7 +54,7 @@
 
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
-  class="app"
+  class="app no-overview-interaction"
   class:overviewing
   style:translate="{x}px {y}px"
   style:width="{w}px"
@@ -82,7 +82,7 @@
     <Icon icon={app.icon} width="1.25rem" height="1.25rem" />
     <p class="title m3-font-label-large">{app.name}</p>
   </div>
-  <button onclick={close} aria-label="Close">
+  <button class="no-overview-interaction" onclick={close} aria-label="Close">
     <Layer />
     <Icon icon={iconClose} width="1.25rem" height="1.25rem" />
   </button>

@@ -1,40 +1,26 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import layoutWindows from "$lib/layout";
+  import Chrome from "./Chrome.svelte";
   import Window from "./Window.svelte";
-  import type { TangentApp } from "./apps";
-  import apps from "./apps";
+  import type { TangentWindow } from "./apps";
 
-  let { overviewing = $bindable() }: { overviewing: boolean } = $props();
-
-  type TangentWindow = {
-    app: TangentApp;
-    id: string;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  };
+  let {
+    overviewing = $bindable(),
+  }: {
+    overviewing: boolean;
+  } = $props();
 
   let innerWidth = $state(2560);
   let innerHeight = $state(1322);
   let windows: TangentWindow[] = $state([]);
   let windowOrder: string[] = $state([]);
-  const launchApp = (app: TangentApp) => {
-    const window = { id: crypto.randomUUID(), app, x: 0, y: 0, w: innerWidth, h: innerHeight };
-    windows = [...windows, window];
-    windowOrder = [...windowOrder, window.id];
-  };
   const removeWindow = (window: TangentWindow) => {
     windows = windows.filter((w) => w.id != window.id);
     windowOrder = windowOrder.filter((id) => id != window.id);
   };
 
-  onMount(() => {
-    launchApp(apps[0]);
-    launchApp(apps[0]);
-  });
-
+  let backgroundScale = $derived(Math.max((innerHeight - 6 * 16 * 2) / innerHeight, 0.01));
+  let backgroundMarginScale = $derived((1 - backgroundScale) / 2);
   let overviewed = $derived(
     layoutWindows(
       windows.map((w) => ({
@@ -45,10 +31,10 @@
         id: w.id,
       })),
       {
-        x: innerWidth * 0.05,
-        y: innerHeight * 0.05,
-        width: innerWidth * 0.9,
-        height: innerHeight * 0.9,
+        x: innerWidth * backgroundMarginScale,
+        y: innerHeight * backgroundMarginScale,
+        width: innerWidth * backgroundScale,
+        height: innerHeight * backgroundScale,
       },
       {
         monitorHeight: innerHeight,
@@ -65,6 +51,8 @@
     content="If the computer is a bicycle for the mind, Tangent is a computer for school."
   />
 </svelte:head>
+
+<Chrome bind:overviewing {backgroundScale} bind:windows bind:windowOrder />
 {#each windows as window (window.id)}
   <Window
     {...window}

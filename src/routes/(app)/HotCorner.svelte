@@ -60,7 +60,7 @@
   }}
 />
 <button
-  class="m3-font-label-large"
+  class="m3-font-label-large no-overview-interaction"
   onpointerdown={(e) => {
     if (e.button == 0) trigger();
   }}

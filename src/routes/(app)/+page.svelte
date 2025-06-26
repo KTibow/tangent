@@ -25,7 +25,7 @@
   onclick={overviewing
     ? (e) => {
         const target = e.target as HTMLElement;
-        const closest = target.closest("button") || target.closest(".app");
+        const closest = target.closest(".no-overview-interaction");
         if (!closest) {
           // They clicked away
           overviewing = false;
@@ -35,22 +35,10 @@
 />
 <Styling />
 <HotCorner bind:overviewing />
-<div class="window-surface" class:overviewing></div>
 <Windows bind:overviewing />
 
 <style>
   :root {
     background-color: rgb(var(--m3-scheme-surface-container-lowest));
-  }
-  .window-surface {
-    position: absolute;
-    inset: 0;
-    background-color: rgb(var(--m3-scheme-primary-container-subtle) / 0.6);
-    transition: var(--m3-util-easing-fast);
-    &.overviewing {
-      border-radius: 4rem;
-      scale: 0.89;
-      transition: var(--m3-util-easing-fast-spatial);
-    }
   }
 </style>

@@ -79,6 +79,7 @@
 
   $effect(() => {
     if (!browser) return;
+    // TODO: make this handle the "existing css" case better
 
     const hct = Hct.fromInt(argbFromHex(color));
     const tertiaryPalette =
