@@ -2,7 +2,6 @@
   import { setContext } from "svelte";
   import Styling from "$lib/sdk/Styling.svelte";
   import { listen } from "$lib/sdk/comms-tangent";
-  import HotCorner from "./HotCorner.svelte";
   import Windows from "./Windows.svelte";
 
   let overviewing = $state(true);
@@ -34,7 +33,6 @@
     : undefined}
 />
 <Styling />
-<HotCorner bind:overviewing />
 <Windows bind:overviewing />
 
 <style>

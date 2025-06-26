@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Spring } from "svelte/motion";
+  import { fade } from "svelte/transition";
   import { listen } from "$lib/sdk/comms-tangent";
 
   let { overviewing = $bindable() }: { overviewing: boolean } = $props();
@@ -67,6 +68,7 @@
   onkeypress={(e) => {
     if (e.key == " ") trigger();
   }}
+  transition:fade={{ duration: 200 }}
 >
   <span
     style:background-position-x="{conditionalPull(overviewing ? 0 : 100, triggerTimeout > 0)}%"

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Layer } from "m3-svelte";
   import Icon from "$lib/Icon.svelte";
+  import HotCorner from "./HotCorner.svelte";
   import apps, { type TangentApp, type TangentWindow } from "./apps";
 
   let {
@@ -16,8 +17,9 @@
   } = $props();
 
   $effect(() => {
-    if (windowOrder.length == 0 && !overviewing) {
-      overviewing = true;
+    if (!windowOrder.length) {
+      // weird code but basically just forces overviewing on
+      overviewing = overviewing || true;
     }
   });
 
@@ -38,6 +40,9 @@
   };
 </script>
 
+{#if windowOrder.length}
+  <HotCorner bind:overviewing />
+{/if}
 <div class="background" class:overviewing style:--background-scale={backgroundScale}></div>
 <div class="dock">
   <!-- todo: customization -->
