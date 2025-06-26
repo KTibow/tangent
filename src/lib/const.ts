@@ -49,6 +49,8 @@ export const defaultCSS = `@media (prefers-color-scheme: light) {
 --m3-scheme-on-error: 255 239 239;
 --m3-scheme-error-container: 247 75 109;
 --m3-scheme-on-error-container: 81 0 23;
+--m3-scheme-shadow: 0 0 0;
+--m3-scheme-scrim: 0 0 0;
 --m3-scheme-on-on-primary: 167 27 124;
 --m3-scheme-primary-container-subtle: 255 196 225;
 --m3-scheme-on-primary-container-subtle: 141 0 103;
@@ -109,6 +111,8 @@ export const defaultCSS = `@media (prefers-color-scheme: light) {
 --m3-scheme-on-error: 73 0 19;
 --m3-scheme-error-container: 167 1 56;
 --m3-scheme-on-error-container: 255 178 185;
+--m3-scheme-shadow: 0 0 0;
+--m3-scheme-scrim: 0 0 0;
 --m3-scheme-on-on-primary: 255 132 204;
 --m3-scheme-primary-container-subtle: 90 0 64;
 --m3-scheme-on-primary-container-subtle: 255 127 202;
