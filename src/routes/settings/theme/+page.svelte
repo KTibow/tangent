@@ -127,8 +127,12 @@ ${darkColors}
 <h2 class="m3-font-headline-large">Color</h2>
 <div class="controls">
   <input type="color" id="color-picker" bind:value={color} />
-  <Button variant="filled" for="color-picker">Pick</Button>
-  <Button variant="tonal" click={() => (color = "#cc63a1")}>Reset</Button>
+  {#if color == "#cc63a1"}
+    <Button variant="filled" for="color-picker">Pick</Button>
+  {:else}
+    <Button variant="filled" click={() => (color = "#cc63a1")}>Reset</Button>
+    <Button variant="tonal" for="color-picker">Repick</Button>
+  {/if}
 </div>
 <h2 class="m3-font-headline-large">Mode</h2>
 <p>
