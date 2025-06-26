@@ -262,7 +262,17 @@ function serve(path, client = false) {
       `var Variant;(function(Variant2){Variant2[Variant2.MONOCHROME=0]="MONOCHROME",Variant2[Variant2.NEUTRAL=1]="NEUTRAL",Variant2[Variant2.TONAL_SPOT=2]="TONAL_SPOT",Variant2[Variant2.VIBRANT=3]="VIBRANT",Variant2[Variant2.EXPRESSIVE=4]="EXPRESSIVE",Variant2[Variant2.FIDELITY=5]="FIDELITY",Variant2[Variant2.CONTENT=6]="CONTENT",Variant2[Variant2.RAINBOW=7]="RAINBOW",Variant2[Variant2.FRUIT_SALAD=8]="FRUIT_SALAD"})(Variant||(Variant={}));`,
       `var Variant={"0":"MONOCHROME","1":"NEUTRAL","2":"TONAL_SPOT","3":"VIBRANT","4":"EXPRESSIVE","5":"FIDELITY","6":"CONTENT","7":"RAINBOW","8":"FRUIT_SALAD",MONOCHROME:0,NEUTRAL:1,TONAL_SPOT:2,VIBRANT:3,EXPRESSIVE:4,FIDELITY:5,CONTENT:6,RAINBOW:7,FRUIT_SALAD:8};`,
     );
-    content = content.replaceAll(`specVersion==="2025"`, "true");
+    content = content.replaceAll(
+      `function getSpec(specVersion){return specVersion==="2025"?spec2025:spec2021}`,
+      "",
+    );
+    content = content.replaceAll(
+      `function getSpec$1(specVersion){return specVersion==="2025"?spec2025$1:spec2021$1}`,
+      "",
+    );
+    content = content.replaceAll(/getSpec\([A-Za-z.]+?\)/g, "spec2025");
+    content = content.replaceAll(/getSpec\$1\([A-Za-z.]+?\)/g, "spec2025$1");
+    content = content.replaceAll(` platform==="phone"`, " true");
     content = content.replaceAll(`s.platform==="phone"`, "true");
     content = content.replaceAll(`s.platform==="watch"`, "false");
     content = content.replaceAll(`s.variant===Variant.VIBRANT`, "true");
