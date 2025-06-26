@@ -96,6 +96,12 @@
     position: absolute;
     transform-origin: center center;
     z-index: var(--z-index);
+
+    user-select: none;
+    transition:
+      scale var(--m3-util-easing-fast),
+      translate var(--m3-util-easing-fast);
+
     &.overviewing {
       cursor: pointer;
       scale: var(--scale);
@@ -109,9 +115,6 @@
         z-index: 1000;
       }
     }
-    transition:
-      scale var(--m3-util-easing-fast),
-      translate var(--m3-util-easing-fast);
     iframe {
       flex: 1;
       background-color: rgb(var(--m3-scheme-background));

@@ -15,6 +15,12 @@
     windowOrder: string[];
   } = $props();
 
+  $effect(() => {
+    if (windowOrder.length == 0 && !overviewing) {
+      overviewing = true;
+    }
+  });
+
   const launchApp = (app: TangentApp) => {
     const window = { id: crypto.randomUUID(), app, x: 0, y: 0, w: innerWidth, h: innerHeight };
     windows.push(window);
