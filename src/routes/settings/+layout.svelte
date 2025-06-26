@@ -5,8 +5,7 @@
   import { NavCMLX, NavCMLXItem } from "m3-svelte";
   import type { Snippet } from "svelte";
   import { page } from "$app/state";
-
-  import "$lib/sdk/index.js";
+  import SDK from "$lib/sdk/sdk.svelte";
 
   let { children }: { children: Snippet } = $props();
   const pages = {
@@ -16,6 +15,7 @@
   };
 </script>
 
+<SDK />
 <div class="layout">
   <NavCMLX variant="expanded">
     {#each Object.entries(pages) as [name, { icon, href }] (href)}

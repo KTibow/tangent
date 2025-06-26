@@ -13,6 +13,7 @@
     h,
     scale,
     overviewing,
+    css,
     index,
     close,
     select,
@@ -24,12 +25,27 @@
     h: number;
     scale?: number;
     overviewing: boolean;
+    css: string;
     index: number;
     close: () => void;
     select: () => void;
   } = $props();
+
+  let iframe: HTMLIFrameElement | undefined = $state();
+  let isReady = $state(false);
+
+  $effect(() => {
+    if (isReady) {
+      iframe?.contentWindow?.postMessage({ css }, "*");
+    }
+  });
 </script>
 
+<svelte:window
+  onmessage={({ source, data }) => {
+    if (source == iframe?.contentWindow && data.type == "ready") isReady = true;
+  }}
+/>
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
   class="app"
@@ -53,7 +69,7 @@
       <Icon icon={iconClose} />
     </button>
   {/if}
-  <iframe title={app.name} src={app.url} inert={overviewing}></iframe>
+  <iframe title={app.name} src={app.url} inert={overviewing} bind:this={iframe}></iframe>
 </div>
 <div class="info" style:left="{x + w * 0.5}px" style:top="{y + h * 0.5 + h * 0.5 * (scale || 0)}px">
   <div class="details">
@@ -92,6 +108,8 @@
       translate var(--m3-util-easing-fast);
     iframe {
       flex: 1;
+      background-color: rgb(var(--m3-scheme-background));
+      color: rgb(var(--m3-scheme-on-background));
       border-radius: inherit;
     }
   }

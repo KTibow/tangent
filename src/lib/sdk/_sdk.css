@@ -1,0 +1,3 @@
+:root {
+  --top-inset: calc(env(safe-area-inset-top) + 2rem);
+}

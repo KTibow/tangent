@@ -5,7 +5,7 @@ export type TangentApp = { name: string; url: string; icon: IconifyIcon };
 export default [
   {
     name: "Settings",
-    url: "/settings",
+    url: "/settings/about",
     icon: iconSettings,
   },
 ];

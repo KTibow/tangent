@@ -19,6 +19,7 @@
     "@eslint/js": "^9.29.0",
     "@iconify/types": "^2.0.0",
     "@ktibow/iconset-material-symbols": "^0.0.1750746019",
+    "@ktibow/material-color-utilities-nightly": "^0.3.11750814755278",
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "^2.22.0",
     "@sveltejs/vite-plugin-svelte": "^5.1.0",

@@ -17,7 +17,6 @@
 
   let innerWidth = $state(2560);
   let innerHeight = $state(1322);
-  let overviewing = $state(true);
   let windows: Window[] = $state([]);
   let windowOrder: string[] = $state([]);
   const launchApp = (app: TangentApp) => {
@@ -65,17 +64,21 @@
     content="If the computer is a bicycle for the mind, Tangent is a computer for school."
   />
 </svelte:head>
-<System bind:overviewing />
-{#each windows as window (window.id)}
-  <Window
-    {...window}
-    {overviewing}
-    index={windowOrder.indexOf(window.id)}
-    close={() => removeWindow(window)}
-    select={() => {
-      windowOrder = [...windowOrder.filter((i) => i != window.id), window.id];
-      overviewing = false;
-    }}
-    {...overviewing ? overviewed[window.id] : {}}
-  />
-{/each}
+<System>
+  {#snippet render(overviewing, css)}
+    {#each windows as window (window.id)}
+      <Window
+        {...window}
+        overviewing={overviewing.value}
+        css={css.value}
+        index={windowOrder.indexOf(window.id)}
+        close={() => removeWindow(window)}
+        select={() => {
+          windowOrder = [...windowOrder.filter((i) => i != window.id), window.id];
+          overviewing.set(false);
+        }}
+        {...overviewing.value ? overviewed[window.id] : {}}
+      />
+    {/each}
+  {/snippet}
+</System>

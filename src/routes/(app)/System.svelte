@@ -1,7 +1,14 @@
 <script lang="ts">
+  import type { Snippet } from "svelte";
+  import { defaultCSS } from "$lib/const";
+  import Styling from "./Styling.svelte";
   import HotCorner from "./HotCorner.svelte";
 
-  let { overviewing = $bindable() }: { overviewing: boolean } = $props();
+  type State<T> = { value: T; set: (value: T) => void };
+  let { render }: { render: Snippet<[State<boolean>, State<string>]> } = $props();
+
+  let overviewing = $state(true);
+  let css = $state(defaultCSS);
 </script>
 
 <svelte:window
@@ -16,8 +23,13 @@
       }
     : undefined}
 />
+<Styling bind:css />
 <HotCorner bind:overviewing />
 <div class="window-surface" class:overviewing></div>
+{@render render(
+  { value: overviewing, set: (value) => (overviewing = value) },
+  { value: css, set: (value) => (css = value) },
+)}
 
 <style>
   :root {
@@ -26,7 +38,7 @@
   .window-surface {
     position: absolute;
     inset: 0;
-    background-color: rgb(var(--m3-scheme-primary-container-subtle) / 0.8);
+    background-color: rgb(var(--m3-scheme-primary-container-subtle) / 0.6);
     transition: var(--m3-util-easing-fast);
     &.overviewing {
       border-radius: 4rem;
