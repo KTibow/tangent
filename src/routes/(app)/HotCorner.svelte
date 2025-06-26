@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { listen } from "$lib/sdk/comms-tangent";
   import { Spring } from "svelte/motion";
+  import { listen } from "$lib/sdk/comms-tangent";
 
   let { overviewing = $bindable() }: { overviewing: boolean } = $props();
   let openedAt = 0;

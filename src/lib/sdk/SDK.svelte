@@ -1,9 +1,9 @@
 <script lang="ts">
   import { setContext, type Snippet } from "svelte";
-  import { listen } from "./comms-app";
   import "./_sdk.css";
   import Styling from "./Styling.svelte";
   import { storage, handleFullSync } from "./_storage-for-app.svelte";
+  import { listen } from "./comms-app";
 
   let { children }: { children: Snippet } = $props();
 

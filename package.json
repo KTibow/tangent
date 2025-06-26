@@ -12,7 +12,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write .",
-    "lint": "prettier --check . && eslint ."
+    "lint": "prettier --check . && eslint .",
+    "lint-fix": "prettier --check . && eslint . --fix"
   },
   "devDependencies": {
     "@eslint/compat": "^1.3.1",
@@ -26,6 +27,7 @@
     "@tsndr/cloudflare-worker-jwt": "^3.2.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-svelte": "^3.9.3",
     "fast-xml-parser": "^5.2.5",
     "globals": "^16.2.0",

@@ -1,5 +1,5 @@
-import { enhance } from "$app/forms";
 import type { SubmitFunction } from "@sveltejs/kit";
+import { enhance } from "$app/forms";
 
 export const enhanceWithTransitions = (node: HTMLFormElement, submitFn?: SubmitFunction) =>
   enhance(node, (input) => {

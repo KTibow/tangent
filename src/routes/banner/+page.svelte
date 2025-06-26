@@ -1,7 +1,7 @@
 <script>
-  import { iconTangent } from "$lib/icons";
-  import TangentContainer from "$lib/TangentContainer.svelte";
   import Icon from "$lib/Icon.svelte";
+  import TangentContainer from "$lib/TangentContainer.svelte";
+  import { iconTangent } from "$lib/icons";
 </script>
 
 <TangentContainer>

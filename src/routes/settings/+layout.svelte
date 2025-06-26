@@ -1,7 +1,7 @@
 <script lang="ts">
-  import iconTheme from "@ktibow/iconset-material-symbols/palette";
   import iconFeedback from "@ktibow/iconset-material-symbols/feedback-rounded";
   import iconAbout from "@ktibow/iconset-material-symbols/info-rounded";
+  import iconTheme from "@ktibow/iconset-material-symbols/palette";
   import { NavCMLX, NavCMLXItem } from "m3-svelte";
   import type { Snippet } from "svelte";
   import { page } from "$app/state";

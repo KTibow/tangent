@@ -1,11 +1,11 @@
 <script lang="ts">
   import iconClose from "@ktibow/iconset-material-symbols/close-rounded";
-  import { scale as scaleAnimation } from "svelte/transition";
   import { easeEmphasizedAccel, easeEmphasizedDecel, Layer } from "m3-svelte";
-  import { connect } from "$lib/sdk/comms-tangent";
+  import { scale as scaleAnimation } from "svelte/transition";
   import Icon from "$lib/Icon.svelte";
-  import type { TangentApp } from "./apps";
+  import { connect } from "$lib/sdk/comms-tangent";
   import { getStorage } from "$lib/sdk/storage";
+  import type { TangentApp } from "./apps";
 
   let {
     app,

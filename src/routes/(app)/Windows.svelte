@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import layoutWindows from "$lib/layout";
+  import Window from "./Window.svelte";
   import type { TangentApp } from "./apps";
   import apps from "./apps";
-  import Window from "./Window.svelte";
 
   let { overviewing = $bindable() }: { overviewing: boolean } = $props();
 

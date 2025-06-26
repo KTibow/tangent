@@ -1,9 +1,10 @@
-import prettier from "eslint-config-prettier";
+import { fileURLToPath } from "node:url";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
+import prettier from "eslint-config-prettier";
+import importPlugin from "eslint-plugin-import";
 import svelte from "eslint-plugin-svelte";
 import globals from "globals";
-import { fileURLToPath } from "node:url";
 import ts from "typescript-eslint";
 import svelteConfig from "./svelte.config.js";
 
@@ -34,8 +35,27 @@ export default ts.config(
     },
   },
   {
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
-      // "sort-imports": "error",
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal", "parent", "sibling"],
+          pathGroups: [
+            {
+              pattern: "$lib/**",
+              group: "internal",
+            },
+            {
+              pattern: "$app/**",
+              group: "internal",
+            },
+          ],
+          alphabetize: { order: "asc" },
+        },
+      ],
       "svelte/no-at-html-tags": "off",
       "@typescript-eslint/no-explicit-any": "off",
     },
