@@ -1,84 +1,43 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import layoutWindows from "$lib/layout";
-  import type { TangentApp } from "./apps";
-  import apps from "./apps";
-  import System from "./System.svelte";
-  import Window from "./Window.svelte";
+  import { defaultCSS } from "$lib/const";
+  import Styling from "./Styling.svelte";
+  import HotCorner from "./HotCorner.svelte";
+  import Windows from "./Windows.svelte";
 
-  type Window = {
-    app: TangentApp;
-    id: string;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  };
-
-  let innerWidth = $state(2560);
-  let innerHeight = $state(1322);
-  let windows: Window[] = $state([]);
-  let windowOrder: string[] = $state([]);
-  const launchApp = (app: TangentApp) => {
-    const window = { id: crypto.randomUUID(), app, x: 0, y: 0, w: innerWidth, h: innerHeight };
-    windows = [...windows, window];
-    windowOrder = [...windowOrder, window.id];
-  };
-  const removeWindow = (window: Window) => {
-    windows = windows.filter((w) => w.id != window.id);
-    windowOrder = windowOrder.filter((id) => id != window.id);
-  };
-
-  onMount(() => {
-    launchApp(apps[0]);
-    launchApp(apps[0]);
-  });
-
-  let overviewed = $derived(
-    layoutWindows(
-      windows.map((w) => ({
-        width: w.w,
-        height: w.h,
-        centerX: w.x + w.w * 0.5,
-        centerY: w.y + w.h * 0.5,
-        id: w.id,
-      })),
-      {
-        x: innerWidth * 0.05,
-        y: innerHeight * 0.05,
-        width: innerWidth * 0.9,
-        height: innerHeight * 0.9,
-      },
-      {
-        monitorHeight: innerHeight,
-      },
-    ),
-  );
+  let overviewing = $state(true);
+  let css = $state(defaultCSS);
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
-<svelte:head>
-  <title>Tangent</title>
-  <meta
-    name="description"
-    content="If the computer is a bicycle for the mind, Tangent is a computer for school."
-  />
-</svelte:head>
-<System>
-  {#snippet render(overviewing, css)}
-    {#each windows as window (window.id)}
-      <Window
-        {...window}
-        overviewing={overviewing.value}
-        css={css.value}
-        index={windowOrder.indexOf(window.id)}
-        close={() => removeWindow(window)}
-        select={() => {
-          windowOrder = [...windowOrder.filter((i) => i != window.id), window.id];
-          overviewing.set(false);
-        }}
-        {...overviewing.value ? overviewed[window.id] : {}}
-      />
-    {/each}
-  {/snippet}
-</System>
+<svelte:window
+  onclick={overviewing
+    ? (e) => {
+        const target = e.target as HTMLElement;
+        const closest = target.closest("button") || target.closest(".app");
+        if (!closest) {
+          // They clicked away
+          overviewing = false;
+        }
+      }
+    : undefined}
+/>
+<Styling bind:css />
+<HotCorner bind:overviewing />
+<div class="window-surface" class:overviewing></div>
+<Windows bind:overviewing bind:css />
+
+<style>
+  :root {
+    background-color: rgb(var(--m3-scheme-surface-container-lowest));
+  }
+  .window-surface {
+    position: absolute;
+    inset: 0;
+    background-color: rgb(var(--m3-scheme-primary-container-subtle) / 0.6);
+    transition: var(--m3-util-easing-fast);
+    &.overviewing {
+      border-radius: 4rem;
+      scale: 0.89;
+      transition: var(--m3-util-easing-fast-spatial);
+    }
+  }
+</style>
