@@ -5,7 +5,7 @@
   import { NavCMLX, NavCMLXItem } from "m3-svelte";
   import type { Snippet } from "svelte";
   import { page } from "$app/state";
-  import SDK from "$lib/sdk/sdk.svelte";
+  import SDK from "$lib/sdk/SDK.svelte";
 
   let { children }: { children: Snippet } = $props();
   const pages = {
@@ -15,23 +15,24 @@
   };
 </script>
 
-<SDK />
-<div class="layout">
-  <NavCMLX variant="expanded">
-    {#each Object.entries(pages) as [name, { icon, href }] (href)}
-      <NavCMLXItem
-        variant="expanded"
-        text={name}
-        {icon}
-        {href}
-        selected={page.url.pathname == href}
-      />
-    {/each}
-  </NavCMLX>
-  <main>
-    {@render children()}
-  </main>
-</div>
+<SDK>
+  <div class="layout">
+    <NavCMLX variant="expanded">
+      {#each Object.entries(pages) as [name, { icon, href }] (href)}
+        <NavCMLXItem
+          variant="expanded"
+          text={name}
+          {icon}
+          {href}
+          selected={page.url.pathname == href}
+        />
+      {/each}
+    </NavCMLX>
+    <main>
+      {@render children()}
+    </main>
+  </div>
+</SDK>
 
 <style>
   .layout {

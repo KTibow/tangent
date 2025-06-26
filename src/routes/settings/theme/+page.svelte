@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { postMessage } from "$lib/sdk/common";
   import {
     argbFromHex,
     ContrastCurve,
@@ -11,7 +10,10 @@
     Variant,
   } from "@ktibow/material-color-utilities-nightly";
   import { Button } from "m3-svelte";
+  import { browser } from "$app/environment";
+  import { getStorage } from "$lib/sdk/storage";
 
+  const storage = getStorage();
   const getColors = () => {
     const materialColors = new MaterialDynamicColors();
     const onOnPrimary = DynamicColor.fromPalette({
@@ -76,7 +78,7 @@
   let color = $state("#cc63a1");
 
   $effect(() => {
-    if (!postMessage) return;
+    if (!browser) return;
 
     const hct = Hct.fromInt(argbFromHex(color));
     const tertiaryPalette =
@@ -122,7 +124,7 @@ ${lightColors}
 ${darkColors}
 }
 }`;
-    postMessage({ type: "css-change", css }, "*");
+    storage[".config/styles.css"] = css;
   });
 </script>
 

@@ -1,11 +1,24 @@
 <script lang="ts">
-  import { defaultCSS } from "$lib/const";
-  import Styling from "./Styling.svelte";
+  import { setContext } from "svelte";
+  import Styling from "$lib/sdk/Styling.svelte";
+  import { listen } from "$lib/sdk/comms-tangent";
   import HotCorner from "./HotCorner.svelte";
   import Windows from "./Windows.svelte";
 
   let overviewing = $state(true);
-  let css = $state(defaultCSS);
+
+  const storage: Record<string, string> = $state({});
+  setContext("storage", storage);
+
+  listen((data) => {
+    if (data.type == "storage-set") {
+      const { key, value } = data;
+      storage[key] = value;
+    } else if (data.type == "storage-delete") {
+      const { key } = data;
+      delete storage[key];
+    }
+  });
 </script>
 
 <svelte:window
@@ -20,10 +33,10 @@
       }
     : undefined}
 />
-<Styling bind:css />
+<Styling />
 <HotCorner bind:overviewing />
 <div class="window-surface" class:overviewing></div>
-<Windows bind:overviewing bind:css />
+<Windows bind:overviewing />
 
 <style>
   :root {

@@ -35,6 +35,7 @@ export default ts.config(
   },
   {
     rules: {
+      // "sort-imports": "error",
       "svelte/no-at-html-tags": "off",
       "@typescript-eslint/no-explicit-any": "off",
     },

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { listen } from "$lib/sdk/comms-tangent";
   import { Spring } from "svelte/motion";
 
   let { overviewing = $bindable() }: { overviewing: boolean } = $props();
@@ -33,6 +34,14 @@
   });
 
   const conditionalPull = (a: number, pull: boolean) => a + (pull ? (50 - a) * 0.5 : 0);
+
+  listen((data) => {
+    if (data.type == "keyup-alt") {
+      overviewing = !overviewing;
+    } else if (data.type == "mousemove") {
+      mouse = { x: data.x, y: data.y };
+    }
+  });
 </script>
 
 <svelte:window
@@ -42,13 +51,6 @@
   onkeyup={(e) => {
     if (e.key == "Alt") {
       overviewing = !overviewing;
-    }
-  }}
-  onmessage={({ data }) => {
-    if (data.type == "keyup-alt") {
-      overviewing = !overviewing;
-    } else if (data.type == "mousemove") {
-      mouse = { x: data.x, y: data.y };
     }
   }}
 />

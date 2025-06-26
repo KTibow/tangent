@@ -2,8 +2,10 @@
   import iconClose from "@ktibow/iconset-material-symbols/close-rounded";
   import { scale as scaleAnimation } from "svelte/transition";
   import { easeEmphasizedAccel, easeEmphasizedDecel, Layer } from "m3-svelte";
+  import { connect } from "$lib/sdk/comms-tangent";
   import Icon from "$lib/Icon.svelte";
   import type { TangentApp } from "./apps";
+  import { getStorage } from "$lib/sdk/storage";
 
   let {
     app,
@@ -13,7 +15,6 @@
     h,
     scale,
     overviewing,
-    css,
     index,
     close,
     select,
@@ -25,27 +26,32 @@
     h: number;
     scale?: number;
     overviewing: boolean;
-    css: string;
     index: number;
     close: () => void;
     select: () => void;
   } = $props();
 
+  const storage = getStorage();
+
   let iframe: HTMLIFrameElement | undefined = $state();
   let isReady = $state(false);
 
+  let { listen, send } = $derived(connect(iframe));
+
+  $effect(() => {
+    listen((data) => {
+      if (data.type == "ready") {
+        isReady = true;
+      }
+    });
+  });
   $effect(() => {
     if (isReady) {
-      iframe?.contentWindow?.postMessage({ css }, "*");
+      send({ storage: $state.snapshot(storage) });
     }
   });
 </script>
 
-<svelte:window
-  onmessage={({ source, data }) => {
-    if (source == iframe?.contentWindow && data.type == "ready") isReady = true;
-  }}
-/>
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <div
   class="app"

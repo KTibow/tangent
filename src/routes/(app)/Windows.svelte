@@ -5,8 +5,7 @@
   import apps from "./apps";
   import Window from "./Window.svelte";
 
-  let { overviewing = $bindable(), css = $bindable() }: { overviewing: boolean; css: string } =
-    $props();
+  let { overviewing = $bindable() }: { overviewing: boolean } = $props();
 
   type TangentWindow = {
     app: TangentApp;
@@ -70,7 +69,6 @@
   <Window
     {...window}
     {overviewing}
-    {css}
     index={windowOrder.indexOf(window.id)}
     close={() => removeWindow(window)}
     select={() => {
