@@ -12,67 +12,71 @@
   } from "@ktibow/material-color-utilities-nightly";
   import { Button } from "m3-svelte";
 
-  const materialColors = new MaterialDynamicColors();
-  const onOnPrimary = DynamicColor.fromPalette({
-    name: "on_on_primary",
-    palette: (s) => s.primaryPalette,
-    background: () => materialColors.onPrimary(),
-    contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
-  });
-  const primaryContainerSubtle = DynamicColor.fromPalette({
-    name: "primary_container_subtle",
-    palette: (s) => s.primaryPalette,
-    isBackground: true,
-    background: (s) => materialColors.highestSurface(s),
-    contrastCurve: () => undefined,
-  });
-  const onPrimaryContainerSubtle = DynamicColor.fromPalette({
-    name: "on_primary_container_subtle",
-    palette: (s) => s.primaryPalette,
-    background: () => primaryContainerSubtle,
-    contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
-  });
-  const tertiaryContainerSubtle = DynamicColor.fromPalette({
-    name: "tertiary_container_subtle",
-    palette: (s) => s.tertiaryPalette,
-    isBackground: true,
-    background: (s) => materialColors.highestSurface(s),
-    contrastCurve: () => undefined,
-  });
-  const onTertiaryContainerSubtle = DynamicColor.fromPalette({
-    name: "on_tertiary_container_subtle",
-    palette: (s) => s.tertiaryPalette,
-    background: () => tertiaryContainerSubtle,
-    contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
-  });
-  const errorContainerSubtle = DynamicColor.fromPalette({
-    name: "error_container_subtle",
-    palette: (s) => s.errorPalette,
-    isBackground: true,
-    background: (s) => materialColors.highestSurface(s),
-    contrastCurve: () => undefined,
-  });
-  const onErrorContainerSubtle = DynamicColor.fromPalette({
-    name: "on_error_container_subtle",
-    palette: (s) => s.errorPalette,
-    background: () => errorContainerSubtle,
-    contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
-  });
-  const colors = [
-    ...materialColors.allColors,
-    materialColors.shadow(),
-    onOnPrimary,
-    primaryContainerSubtle,
-    onPrimaryContainerSubtle,
-    tertiaryContainerSubtle,
-    onTertiaryContainerSubtle,
-    errorContainerSubtle,
-    onErrorContainerSubtle,
-  ];
+  const getColors = () => {
+    const materialColors = new MaterialDynamicColors();
+    const onOnPrimary = DynamicColor.fromPalette({
+      name: "on_on_primary",
+      palette: (s) => s.primaryPalette,
+      background: () => materialColors.onPrimary(),
+      contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
+    });
+    const primaryContainerSubtle = DynamicColor.fromPalette({
+      name: "primary_container_subtle",
+      palette: (s) => s.primaryPalette,
+      isBackground: true,
+      background: (s) => materialColors.highestSurface(s),
+      contrastCurve: () => undefined,
+    });
+    const onPrimaryContainerSubtle = DynamicColor.fromPalette({
+      name: "on_primary_container_subtle",
+      palette: (s) => s.primaryPalette,
+      background: () => primaryContainerSubtle,
+      contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
+    });
+    const tertiaryContainerSubtle = DynamicColor.fromPalette({
+      name: "tertiary_container_subtle",
+      palette: (s) => s.tertiaryPalette,
+      isBackground: true,
+      background: (s) => materialColors.highestSurface(s),
+      contrastCurve: () => undefined,
+    });
+    const onTertiaryContainerSubtle = DynamicColor.fromPalette({
+      name: "on_tertiary_container_subtle",
+      palette: (s) => s.tertiaryPalette,
+      background: () => tertiaryContainerSubtle,
+      contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
+    });
+    const errorContainerSubtle = DynamicColor.fromPalette({
+      name: "error_container_subtle",
+      palette: (s) => s.errorPalette,
+      isBackground: true,
+      background: (s) => materialColors.highestSurface(s),
+      contrastCurve: () => undefined,
+    });
+    const onErrorContainerSubtle = DynamicColor.fromPalette({
+      name: "on_error_container_subtle",
+      palette: (s) => s.errorPalette,
+      background: () => errorContainerSubtle,
+      contrastCurve: () => new ContrastCurve(6, 6, 7, 11),
+    });
+    return [
+      ...materialColors.allColors,
+      materialColors.shadow(),
+      onOnPrimary,
+      primaryContainerSubtle,
+      onPrimaryContainerSubtle,
+      tertiaryContainerSubtle,
+      onTertiaryContainerSubtle,
+      errorContainerSubtle,
+      onErrorContainerSubtle,
+    ];
+  };
 
   let color = $state("#cc63a1");
 
-  let css = $derived.by(() => {
+  $effect(() => {
+    if (!postMessage) return;
+
     const hct = Hct.fromInt(argbFromHex(color));
     const tertiaryPalette =
       348 <= hct.hue && hct.hue < 349 ? TonalPalette.fromHueAndChroma(50, 56) : undefined;
@@ -100,13 +104,14 @@
       const blue = argb & 255;
       return `--m3-scheme-${kebabCase}: ${red} ${green} ${blue};`;
     };
+    const colors = getColors();
     const lightColors = colors
       .map((color) => genColorVariable(color.name, color.getArgb(light)))
       .join("\n");
     const darkColors = colors
       .map((color) => genColorVariable(color.name, color.getArgb(dark)))
       .join("\n");
-    return `@media (prefers-color-scheme: light) {
+    const css = `@media (prefers-color-scheme: light) {
 :root, ::backdrop {
 ${lightColors}
 }
@@ -116,10 +121,6 @@ ${lightColors}
 ${darkColors}
 }
 }`;
-  });
-
-  $effect(() => {
-    if (!postMessage) return;
     postMessage({ type: "css-change", css }, "*");
   });
 </script>

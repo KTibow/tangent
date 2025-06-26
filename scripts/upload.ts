@@ -22,141 +22,6 @@ async function process(
 
   const js = (strings: TemplateStringsArray) => strings[0];
 
-  // Process handler.js
-  if (normalizedPath === "handler.js") {
-    let processedContent = content;
-    processedContent = processedContent.replace("\n\t\tserve_prerendered(),", "");
-    processedContent = processedContent.replace(
-      `function createReadableStream(file) {
-\treturn /** @type {ReadableStream} */ (Readable.toWeb(createReadStream(file)));
-}`,
-      `function createReadableStream(file) {
-throw new Error("ruh roh someone finally decided to use serverside fetch");
-}`,
-    );
-    processedContent = `import { readFile } from "https://esm.town/v/std/utils/index.ts";
-${processedContent}`;
-    processedContent = processedContent.replace(
-      "const dir = path.dirname(fileURLToPath(import.meta.url))",
-      'const dir = "."',
-    );
-    processedContent = processedContent.replace(
-      "get_raw_body(request, bodySizeLimit)",
-      "request.body",
-    );
-    processedContent = processedContent.replace(
-      /function serve[^]+?\n}\n\n\/\//,
-      js`
-function serve(path, client = false) {
-  // Simple hash function for etag generation
-  async function simpleHash(str) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(str);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
-  }
-
-  // Helper function to determine content type
-  function getContentType(filePath) {
-    const ext = filePath.split('.').pop()?.toLowerCase();
-    const mimeTypes = {
-      'html': 'text/html',
-      'css': 'text/css',
-      'js': 'application/javascript',
-      'json': 'application/json',
-      'png': 'image/png',
-      'jpg': 'image/jpeg',
-      'jpeg': 'image/jpeg',
-      'gif': 'image/gif',
-      'svg': 'image/svg+xml',
-      'ico': 'image/x-icon',
-      'woff': 'font/woff',
-      'woff2': 'font/woff2',
-      'ttf': 'font/ttf',
-      'eot': 'application/vnd.ms-fontobject'
-    };
-    return mimeTypes[ext] || 'application/octet-stream';
-  }
-
-  return async (req, res, next) => {
-    const url = new URL(req.url, 'http://localhost');
-    let filePath = url.pathname;
-
-    // Remove leading slash and prepend the serve path
-    if (filePath.startsWith('/')) {
-      filePath = filePath.slice(1);
-    }
-
-    // Construct full file path
-    const fullPath = path === '.' ? filePath : \`\${path}/\${filePath}\`;
-
-    try {
-      // Try to read the file
-      const content = await readFile(fullPath, import.meta.url);
-
-      // Generate simple etag from content hash
-      const etag = \`W/"\${await simpleHash(content)}"\`;
-
-      // Check if client has matching etag
-      const clientEtag = req.headers['if-none-match'];
-      if (clientEtag === etag) {
-        res.statusCode = 304;
-        res.end();
-        return;
-      }
-
-      // Set headers
-      res.setHeader('Content-Type', getContentType(filePath));
-      res.setHeader('ETag', etag);
-
-      // Handle caching for immutable assets
-      if (client && filePath.startsWith(\`\${manifest.appPath}/immutable/\`)) {
-        res.setHeader('cache-control', 'public,max-age=31536000,immutable');
-      }
-
-      res.end(content);
-    } catch (err) {
-      // File doesn't exist or other error, pass to next middleware
-      if (next) next();
-    }
-  };
-}
-
-//`,
-    );
-
-    // Apply esbuild transformations twice (matching original vite.config.ts behavior)
-    for (let i = 0; i < 2; i++) {
-      const result = await transform(processedContent, {
-        platform: "node",
-        target: "deno2",
-        format: "esm",
-        treeShaking: true,
-        minifySyntax: true,
-      });
-      processedContent = result.code;
-    }
-
-    return { content: processedContent, fileType: "file" };
-  }
-
-  // Process server/index.js
-  if (normalizedPath === "server/index.js") {
-    // Apply esbuild transformations (matching original vite.config.ts behavior)
-    const result = await transform(content, {
-      platform: "node",
-      target: "deno2",
-      format: "esm",
-      treeShaking: true,
-      minifySyntax: true,
-      minifyWhitespace: true,
-      minifyIdentifiers: true,
-    });
-
-    return { content: result.code, fileType: "file" };
-  }
-
   // Process index.js (convert to Val Town HTTP val)
   if (normalizedPath === "index.js") {
     const valTownContent = js`import { handler } from './handler.js';
@@ -264,7 +129,171 @@ export default async function(req) {
     return { content: valTownContent, fileType: "http" };
   }
 
-  // Return content unchanged for other files
+  // Process handler.js
+  if (normalizedPath === "handler.js") {
+    content = content.replace("\n\t\tserve_prerendered(),", "");
+    content = content.replace(
+      `function createReadableStream(file) {
+\treturn /** @type {ReadableStream} */ (Readable.toWeb(createReadStream(file)));
+}`,
+      `function createReadableStream(file) {
+throw new Error("ruh roh someone finally decided to use serverside fetch");
+}`,
+    );
+    content = `import { readFile } from "https://esm.town/v/std/utils/index.ts";
+${content}`;
+    content = content.replace(
+      "const dir = path.dirname(fileURLToPath(import.meta.url))",
+      'const dir = "."',
+    );
+    content = content.replace("get_raw_body(request, bodySizeLimit)", "request.body");
+    content = content.replace(
+      /function serve[^]+?\n}\n\n\/\//,
+      js`
+function serve(path, client = false) {
+  // Simple hash function for etag generation
+  async function simpleHash(str) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
+  }
+
+  // Helper function to determine content type
+  function getContentType(filePath) {
+    const ext = filePath.split('.').pop()?.toLowerCase();
+    const mimeTypes = {
+      'html': 'text/html',
+      'css': 'text/css',
+      'js': 'application/javascript',
+      'json': 'application/json',
+      'png': 'image/png',
+      'jpg': 'image/jpeg',
+      'jpeg': 'image/jpeg',
+      'gif': 'image/gif',
+      'svg': 'image/svg+xml',
+      'ico': 'image/x-icon',
+      'woff': 'font/woff',
+      'woff2': 'font/woff2',
+      'ttf': 'font/ttf',
+      'eot': 'application/vnd.ms-fontobject'
+    };
+    return mimeTypes[ext] || 'application/octet-stream';
+  }
+
+  return async (req, res, next) => {
+    const url = new URL(req.url, 'http://localhost');
+    let filePath = url.pathname;
+
+    // Remove leading slash and prepend the serve path
+    if (filePath.startsWith('/')) {
+      filePath = filePath.slice(1);
+    }
+
+    // Construct full file path
+    const fullPath = path === '.' ? filePath : \`\${path}/\${filePath}\`;
+
+    try {
+      // Try to read the file
+      const content = await readFile(fullPath, import.meta.url);
+
+      // Generate simple etag from content hash
+      const etag = \`W/"\${await simpleHash(content)}"\`;
+
+      // Check if client has matching etag
+      const clientEtag = req.headers['if-none-match'];
+      if (clientEtag === etag) {
+        res.statusCode = 304;
+        res.end();
+        return;
+      }
+
+      // Set headers
+      res.setHeader('Content-Type', getContentType(filePath));
+      res.setHeader('ETag', etag);
+
+      // Handle caching for immutable assets
+      if (client && filePath.startsWith(\`\${manifest.appPath}/immutable/\`)) {
+        res.setHeader('cache-control', 'public,max-age=31536000,immutable');
+      }
+
+      res.end(content);
+    } catch (err) {
+      // File doesn't exist or other error, pass to next middleware
+      if (next) next();
+    }
+  };
+}
+
+//`,
+    );
+
+    // Apply esbuild transformations twice (matching original vite.config.ts behavior)
+    for (let i = 0; i < 2; i++) {
+      const result = await transform(content, {
+        platform: "node",
+        target: "deno2",
+        format: "esm",
+        treeShaking: true,
+        minifySyntax: true,
+      });
+      content = result.code;
+    }
+  }
+
+  // Process server/index.js
+  if (normalizedPath === "server/index.js") {
+    const result = await transform(content, {
+      platform: "node",
+      target: "deno2",
+      format: "esm",
+      treeShaking: true,
+      minifySyntax: true,
+      minifyWhitespace: true,
+      minifyIdentifiers: true,
+    });
+    content = result.code;
+  }
+
+  // Make sure MCU fits in
+  if (content.includes(`specVersion==="2025"`)) {
+    content = content.replaceAll(
+      `var Variant;(function(Variant2){Variant2[Variant2.MONOCHROME=0]="MONOCHROME",Variant2[Variant2.NEUTRAL=1]="NEUTRAL",Variant2[Variant2.TONAL_SPOT=2]="TONAL_SPOT",Variant2[Variant2.VIBRANT=3]="VIBRANT",Variant2[Variant2.EXPRESSIVE=4]="EXPRESSIVE",Variant2[Variant2.FIDELITY=5]="FIDELITY",Variant2[Variant2.CONTENT=6]="CONTENT",Variant2[Variant2.RAINBOW=7]="RAINBOW",Variant2[Variant2.FRUIT_SALAD=8]="FRUIT_SALAD"})(Variant||(Variant={}));`,
+      `var Variant={"0":"MONOCHROME","1":"NEUTRAL","2":"TONAL_SPOT","3":"VIBRANT","4":"EXPRESSIVE","5":"FIDELITY","6":"CONTENT","7":"RAINBOW","8":"FRUIT_SALAD",MONOCHROME:0,NEUTRAL:1,TONAL_SPOT:2,VIBRANT:3,EXPRESSIVE:4,FIDELITY:5,CONTENT:6,RAINBOW:7,FRUIT_SALAD:8};`,
+    );
+    content = content.replaceAll(`specVersion==="2025"`, "true");
+    content = content.replaceAll(`s.platform==="phone"`, "true");
+    content = content.replaceAll(`s.platform==="watch"`, "false");
+    content = content.replaceAll(`s.variant===Variant.VIBRANT`, "true");
+    content = content.replaceAll(/s\.variant===Variant\.[A-Z_]+/g, "false");
+    content = content.replaceAll(
+      `switch(variant){case Variant.`,
+      `switch(Variant.VIBRANT){case Variant.`,
+    );
+    for (const [k, v] of Object.entries({
+      MONOCHROME: 0,
+      NEUTRAL: 1,
+      TONAL_SPOT: 2,
+      VIBRANT: 3,
+      EXPRESSIVE: 4,
+      FIDELITY: 5,
+      CONTENT: 6,
+      RAINBOW: 7,
+      FRUIT_SALAD: 8,
+    })) {
+      content = content.replaceAll(`Variant.${k}`, v.toString());
+    }
+    const result = await transform(content, {
+      format: "esm",
+      treeShaking: true,
+      minify: true,
+    });
+    content = result.code;
+    // await Deno.writeTextFile("debug.js", content);
+  }
+
+  // Return content for other files
   return { content, fileType: "file" };
 }
 
