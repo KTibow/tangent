@@ -37,14 +37,18 @@
 </SDK>
 
 <style>
+  :root {
+    --preferred-top-inset: 2.5rem;
+  }
   .layout {
     display: grid;
     grid-template-columns: auto 1fr;
-    padding-top: calc(var(--top-inset) - 1.5rem + 0.5rem);
+    > :global(*) {
+      padding-top: var(--top-inset) !important;
+    }
   }
   main {
     display: flex;
     flex-direction: column;
-    padding-block: 1.5rem;
   }
 </style>

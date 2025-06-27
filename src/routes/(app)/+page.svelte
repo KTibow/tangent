@@ -3,6 +3,7 @@
   import Styling from "$lib/sdk/Styling.svelte";
   import { listen } from "$lib/sdk/comms-tangent";
   import Windows from "./Windows.svelte";
+  import "./page.css";
 
   let overviewing = $state(true);
 
@@ -34,9 +35,3 @@
 />
 <Styling />
 <Windows bind:overviewing />
-
-<style>
-  :root {
-    background-color: rgb(var(--m3-scheme-surface-container-lowest));
-  }
-</style>
