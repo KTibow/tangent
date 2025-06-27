@@ -44,7 +44,7 @@
   <HotCorner bind:overviewing />
 {/if}
 <div class="background" class:overviewing style:--background-scale={backgroundScale}></div>
-<div class="dock">
+<div class="dock" inert={!overviewing}>
   <!-- todo: customization -->
   {#each apps as app (app.url)}
     <button
