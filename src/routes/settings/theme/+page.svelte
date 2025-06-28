@@ -77,10 +77,7 @@
 
   let color = $state("#cc63a1");
 
-  $effect(() => {
-    if (!browser) return;
-    // TODO: make this handle the "existing css" case better
-
+  const generateCSS = () => {
     const hct = Hct.fromInt(argbFromHex(color));
     const tertiaryPalette =
       348 <= hct.hue && hct.hue < 349 ? TonalPalette.fromHueAndChroma(50, 56) : undefined;
@@ -126,14 +123,21 @@ ${darkColors}
 }
 }`;
     storage[".config/styles.css"] = css;
-  });
+  };
 </script>
 
 <h2 class="m3-font-headline-large">Color</h2>
 <div class="controls">
-  <input type="color" id="color-picker" bind:value={color} />
+  <input type="color" id="color-picker" bind:value={color} oninput={generateCSS} />
   <Button variant="filled" for="color-picker">Pick</Button>
-  <Button variant="text" disabled={color == "#cc63a1"} click={() => (color = "#cc63a1")}>
+  <Button
+    variant="text"
+    disabled={color == "#cc63a1"}
+    click={() => {
+      color = "#cc63a1";
+      generateCSS();
+    }}
+  >
     Reset
   </Button>
 </div>
