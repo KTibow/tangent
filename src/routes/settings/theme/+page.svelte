@@ -10,7 +10,6 @@
     Variant,
   } from "@ktibow/material-color-utilities-nightly";
   import { Button } from "m3-svelte";
-  import { browser } from "$app/environment";
   import { getStorage } from "$lib/sdk/storage";
 
   const storage = getStorage();
