@@ -1,1 +1,1 @@
-TODO
+TODO: Authorization section
