@@ -10,6 +10,7 @@
     Variant,
   } from "@ktibow/material-color-utilities-nightly";
   import { Button } from "m3-svelte";
+  import { browser } from "$app/environment";
   import { getStorage } from "$lib/sdk/storage";
 
   const storage = getStorage();
@@ -77,6 +78,8 @@
   let color = $state("#cc63a1");
 
   const generateCSS = () => {
+    if (!browser) return;
+
     const hct = Hct.fromInt(argbFromHex(color));
     const tertiaryPalette =
       348 <= hct.hue && hct.hue < 349 ? TonalPalette.fromHueAndChroma(50, 56) : undefined;
