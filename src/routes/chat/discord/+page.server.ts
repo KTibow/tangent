@@ -1,4 +1,4 @@
-import { DISCORD_TOKEN } from "$env/static/private";
+import { DISCORD_KEY } from "$env/static/private";
 import type { PageServerLoad } from "./$types";
 
 const discordMappings: Record<string, string> = {
@@ -22,7 +22,7 @@ const replacePingsWithNames = (text: string): string => {
 const read = async (id: string) => {
   const r = await fetch(`https://discord.com/api/v10/channels/${id}/messages`, {
     headers: {
-      authorization: `Bot ${DISCORD_TOKEN}`,
+      authorization: `Bot ${DISCORD_KEY}`,
     },
   });
   if (!r.ok) {
