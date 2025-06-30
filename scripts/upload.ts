@@ -50,21 +50,6 @@ export default async function (req) {
         if (message) this.statusMessage = message;
         if (hdrs) Object.assign(this.headers, hdrs);
         this.headersSent = true;
-
-        // Initialize stream and resolve with proper headers
-        if (!responseResolved) {
-          stream = new ReadableStream({
-            start(c) {
-              controller = c;
-            },
-          });
-          resolve(new Response(stream, {
-            status: this.statusCode,
-            statusText: this.statusMessage,
-            headers: this.headers,
-          }));
-          responseResolved = true;
-        }
       },
 
       setHeader(name, value) {
@@ -85,6 +70,21 @@ export default async function (req) {
           this.writeHead(this.statusCode, this.statusMessage, this.headers);
         }
 
+        // Initialize streaming response on first write
+        if (!responseResolved) {
+          stream = new ReadableStream({
+            start(c) {
+              controller = c;
+            },
+          });
+          resolve(new Response(stream, {
+            status: this.statusCode,
+            statusText: this.statusMessage,
+            headers: this.headers,
+          }));
+          responseResolved = true;
+        }
+
         if (chunk && controller) {
           if (typeof chunk === "string") {
             controller.enqueue(new TextEncoder().encode(chunk));
@@ -98,8 +98,8 @@ export default async function (req) {
       },
 
       end(chunk) {
-        // Handle case where no headers were sent (simple response)
-        if (!this.headersSent && !responseResolved) {
+        // Handle case where no write() calls were made (simple response)
+        if (!responseResolved) {
           let body = "";
           if (chunk) {
             if (typeof chunk === "string") {
@@ -119,7 +119,7 @@ export default async function (req) {
           return;
         }
 
-        // Handle streaming response
+        // Handle streaming response - add final chunk if any
         if (chunk && controller) {
           if (typeof chunk === "string") {
             controller.enqueue(new TextEncoder().encode(chunk));
@@ -130,6 +130,7 @@ export default async function (req) {
           }
         }
 
+        // Close the stream
         if (controller) {
           controller.close();
         }
