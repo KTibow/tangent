@@ -24,107 +24,118 @@ async function process(
 
   // Process index.js (convert to Val Town HTTP val)
   if (normalizedPath === "index.js") {
-    const valTownContent = js`import { handler } from './handler.js';
-import { EventEmitter } from 'node:events';
+    const valTownContent = js`import { handler } from "./handler.js";
+import { EventEmitter } from "node:events";
 
-export default async function(req) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-
-    // Create a proper mock response that implements the Node.js response interface
-    const mockRes = Object.assign(new EventEmitter(), {
-      statusCode: 200,
-      statusMessage: 'OK',
-      headers: {},
-      headersSent: false,
-      finished: false,
-
-      writeHead(statusCode, statusMessage, headers) {
-        if (typeof statusMessage === 'object') {
-          headers = statusMessage;
-          statusMessage = undefined;
-        }
-        this.statusCode = statusCode;
-        if (statusMessage) this.statusMessage = statusMessage;
-        if (headers) Object.assign(this.headers, headers);
-        this.headersSent = true;
-      },
-
-      setHeader(name, value) {
-        this.headers[name] = value;
-      },
-
-      getHeader(name) {
-        return this.headers[name];
-      },
-
-      removeHeader(name) {
-        delete this.headers[name];
-      },
-
-      write(chunk) {
-        if (chunk) {
-          chunks.push(chunk);
-        }
-        return true;
-      },
-
-      end(chunk) {
-        if (chunk) chunks.push(chunk);
-        this.finished = true;
-
-        // Combine all chunks into a single buffer/string
-        let body = '';
-        for (const chunk of chunks) {
-          if (typeof chunk === 'string') {
-            body += chunk;
-          } else if (chunk instanceof Uint8Array || Buffer.isBuffer(chunk)) {
-            body += new TextDecoder().decode(chunk);
-          } else {
-            body += String(chunk);
-          }
-        }
-        if (!body) body = undefined;
-
-        resolve(new Response(body, {
-          status: this.statusCode,
-          statusText: this.statusMessage,
-          headers: this.headers
-        }));
-      }
-    });
-
-    // Create a proper mock request
-    const url = new URL(req.url);
-    const mockReq = {
-      method: req.method,
-      url: url.pathname + url.search,
-      headers: Object.fromEntries(req.headers.entries()),
-      httpVersion: '1.1',
-      httpVersionMajor: 1,
-      httpVersionMinor: 1,
-      connection: { encrypted: req.url.startsWith('https:') },
-      socket: { encrypted: req.url.startsWith('https:') }
-    };
-
-    // Handle body for POST requests
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      req.arrayBuffer().then(buffer => {
-        mockReq.body = new Uint8Array(buffer);
-        handler(mockReq, mockRes);
-      }).catch(reject);
-    } else {
-      handler(mockReq, mockRes);
-    }
-
-    // Timeout after 30 seconds
-    setTimeout(() => {
-      if (!mockRes.finished) {
-        reject(new Error('Request timeout'));
-      }
-    }, 30000);
+export default async function (req) {
+  let controller;
+  const stream = new ReadableStream({
+    start(c) {
+      controller = c;
+    },
   });
-}`;
+
+  let statusCode = 200;
+  let statusMessage = "OK";
+  let headers = {};
+
+  // Create a proper mock response that implements the Node.js response interface
+  const mockRes = Object.assign(new EventEmitter(), {
+    statusCode: 200,
+    statusMessage: "OK",
+    headers: {},
+    headersSent: false,
+    finished: false,
+
+    writeHead(code, message, hdrs) {
+      if (typeof message === "object") {
+        hdrs = message;
+        message = undefined;
+      }
+      statusCode = code;
+      if (message) statusMessage = message;
+      if (hdrs) Object.assign(headers, hdrs);
+      this.statusCode = code;
+      if (message) this.statusMessage = message;
+      if (hdrs) Object.assign(this.headers, hdrs);
+      this.headersSent = true;
+    },
+
+    setHeader(name, value) {
+      headers[name] = value;
+      this.headers[name] = value;
+    },
+
+    getHeader(name) {
+      return this.headers[name];
+    },
+
+    removeHeader(name) {
+      delete headers[name];
+      delete this.headers[name];
+    },
+
+    write(chunk) {
+      if (chunk && controller) {
+        if (typeof chunk === "string") {
+          controller.enqueue(new TextEncoder().encode(chunk));
+        } else if (chunk instanceof Uint8Array || Buffer.isBuffer(chunk)) {
+          controller.enqueue(chunk);
+        } else {
+          controller.enqueue(new TextEncoder().encode(String(chunk)));
+        }
+      }
+      return true;
+    },
+
+    end(chunk) {
+      if (chunk && controller) {
+        if (typeof chunk === "string") {
+          controller.enqueue(new TextEncoder().encode(chunk));
+        } else if (chunk instanceof Uint8Array || Buffer.isBuffer(chunk)) {
+          controller.enqueue(chunk);
+        } else {
+          controller.enqueue(new TextEncoder().encode(String(chunk)));
+        }
+      }
+
+      if (controller) {
+        controller.close();
+      }
+      this.finished = true;
+    },
+  });
+
+  // Create a proper mock request
+  const url = new URL(req.url);
+  const mockReq = {
+    method: req.method,
+    url: url.pathname + url.search,
+    headers: Object.fromEntries(req.headers.entries()),
+    httpVersion: "1.1",
+    httpVersionMajor: 1,
+    httpVersionMinor: 1,
+    connection: { encrypted: req.url.startsWith("https:") },
+    socket: { encrypted: req.url.startsWith("https:") },
+  };
+
+  // Handle body for POST requests
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    const buffer = await req.arrayBuffer();
+    mockReq.body = new Uint8Array(buffer);
+  }
+
+  // Start the handler
+  handler(mockReq, mockRes);
+
+  // Return the streaming response immediately
+  return new Response(stream, {
+    status: statusCode,
+    statusText: statusMessage,
+    headers,
+  });
+}
+`;
 
     return { content: valTownContent, fileType: "http" };
   }
