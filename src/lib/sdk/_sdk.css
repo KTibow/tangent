@@ -5,4 +5,5 @@
     var(--preferred-top-inset, var(--base-top-inset)),
     20dvh
   );
+  --bottom-inset: var(--preferred-bottom-inset);
 }

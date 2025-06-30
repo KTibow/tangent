@@ -42,6 +42,8 @@
     listen((data) => {
       if (data.type == "ready") {
         isReady = true;
+      } else if (data.type == "close") {
+        close();
       }
     });
   });
@@ -129,6 +131,7 @@
     width: 2rem;
     height: 2rem;
     border-radius: var(--m3-util-rounding-full);
+    background-color: rgb(var(--m3-scheme-background) / 0.6);
     color: rgb(var(--m3-scheme-on-background) / 0.8);
 
     position: absolute;

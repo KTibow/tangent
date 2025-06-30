@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Layer } from "m3-svelte";
+  import { preloadData } from "$app/navigation";
   import Icon from "$lib/Icon.svelte";
   import HotCorner from "./HotCorner.svelte";
   import apps, { type TangentApp, type TangentWindow } from "./apps";
@@ -49,6 +50,9 @@
   {#each apps as app (app.url)}
     <button
       class="no-overview-interaction"
+      onpointerover={() => {
+        preloadData(app.url);
+      }}
       onclick={(e) => {
         if (e.ctrlKey) {
           launchApp(app);
@@ -107,7 +111,6 @@
   }
   p {
     color: rgb(var(--m3-scheme-on-surface-variant));
-    interpolate-size: allow-keywords;
     overflow: hidden;
     transition: var(--m3-util-easing-fast) 500ms;
     &:not(button:hover p) {

@@ -97,6 +97,7 @@
     padding: 0 1rem;
     border-radius: var(--m3-util-rounding-full);
 
+    background-color: rgb(var(--m3-scheme-background) / 0.6);
     background-image: linear-gradient(
       to right,
       rgb(var(--m3-scheme-primary-container-subtle)) 20%,

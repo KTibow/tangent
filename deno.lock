@@ -10,6 +10,7 @@
     "npm:@sveltejs/kit@^2.22.0": "2.22.0_@sveltejs+vite-plugin-svelte@5.1.0__svelte@5.34.8___acorn@8.15.0__vite@6.3.5___picomatch@4.0.2_svelte@5.34.8__acorn@8.15.0_vite@6.3.5__picomatch@4.0.2_acorn@8.15.0",
     "npm:@sveltejs/vite-plugin-svelte@^5.1.0": "5.1.0_svelte@5.34.8__acorn@8.15.0_vite@6.3.5__picomatch@4.0.2",
     "npm:@tsndr/cloudflare-worker-jwt@^3.2.0": "3.2.0",
+    "npm:devalue@^5.1.1": "5.1.1",
     "npm:eslint-config-prettier@^10.1.5": "10.1.5_eslint@9.29.0",
     "npm:eslint-plugin-import@^2.32.0": "2.32.0_eslint@9.29.0",
     "npm:eslint-plugin-svelte@^3.9.3": "3.9.3_eslint@9.29.0_svelte@5.34.8__acorn@8.15.0_postcss@8.5.6",
@@ -17,7 +18,9 @@
     "npm:fast-xml-parser@^5.2.5": "5.2.5",
     "npm:globals@^16.2.0": "16.2.0",
     "npm:kreations@^1.2.5": "1.2.5_svelte@5.34.8__acorn@8.15.0",
+    "npm:lean-qr@^2.5.0": "2.5.0",
     "npm:m3-svelte@^4.5.1": "4.5.1",
+    "npm:pbf-esm@^4.0.1": "4.0.1",
     "npm:prettier-plugin-svelte@^3.4.0": "3.4.0_prettier@3.6.1_svelte@5.34.8__acorn@8.15.0",
     "npm:prettier@^3.6.1": "3.6.1",
     "npm:school-districts@^1.0.6": "1.0.6",
@@ -1396,6 +1399,9 @@
         "function-bind"
       ]
     },
+    "ieee754@1.2.1": {
+      "integrity": "sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA=="
+    },
     "ignore@5.3.2": {
       "integrity": "sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g=="
     },
@@ -1633,6 +1639,10 @@
         "svelte"
       ]
     },
+    "lean-qr@2.5.0": {
+      "integrity": "sha512-NFHxjN/R10Lmdpam5B7xxk5/SvZuvXzTNZiFslxxt+Ki8MC9fbMoPbKMVbnj7PD7Ayn1jtxRmVSk96gNXDfdIA==",
+      "bin": true
+    },
     "levn@0.4.1": {
       "integrity": "sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==",
       "dependencies": [
@@ -1803,6 +1813,14 @@
     "path-parse@1.0.7": {
       "integrity": "sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw=="
     },
+    "pbf-esm@4.0.1": {
+      "integrity": "sha512-PQNYMJuYLdqG1vD1rpppacUcFh7OwnZFn6CVpm3Usz1pJAKEIdwQDGw+duMHY5Y4zx9xtyrE6Vkk5ApqVyzerQ==",
+      "dependencies": [
+        "ieee754",
+        "resolve-protobuf-schema"
+      ],
+      "bin": true
+    },
     "picocolors@1.1.1": {
       "integrity": "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="
     },
@@ -1867,6 +1885,9 @@
       "integrity": "sha512-5xGWRa90Sp2+x1dQtNpIpeOQpTDBs9cZDmA/qs2vDNN2i18PdapqY7CmBeyLlMuGqXJRIOPaCaVZTLNQRWUH/A==",
       "bin": true
     },
+    "protocol-buffers-schema@3.6.0": {
+      "integrity": "sha512-TdDRD+/QNdrCGCE7v8340QyuXd4kIWIgapsE2+n/SaGiSSbomYl4TjHlvIoCWRpE7wFt02EpB35VVA2ImcBVqw=="
+    },
     "punycode@2.3.1": {
       "integrity": "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="
     },
@@ -1902,6 +1923,12 @@
     },
     "resolve-from@4.0.0": {
       "integrity": "sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g=="
+    },
+    "resolve-protobuf-schema@2.1.0": {
+      "integrity": "sha512-kI5ffTiZWmJaS/huM8wZfEMer1eRd7oJQhDuxeCLe3t7N7mX3z94CN0xPxBQxFYQTSNz9T0i+v6inKqSdK8xrQ==",
+      "dependencies": [
+        "protocol-buffers-schema"
+      ]
     },
     "resolve@1.22.10": {
       "integrity": "sha512-NPRy+/ncIMeDlTAsuqwKIiferiawhefFJtkNSW0qZJEqMEb+qBt/77B/jGeeek+F0uOeN05CDa6HXbbIgtVX4w==",
@@ -2407,6 +2434,7 @@
         "npm:@sveltejs/kit@^2.22.0",
         "npm:@sveltejs/vite-plugin-svelte@^5.1.0",
         "npm:@tsndr/cloudflare-worker-jwt@^3.2.0",
+        "npm:devalue@^5.1.1",
         "npm:eslint-config-prettier@^10.1.5",
         "npm:eslint-plugin-import@^2.32.0",
         "npm:eslint-plugin-svelte@^3.9.3",
@@ -2414,7 +2442,9 @@
         "npm:fast-xml-parser@^5.2.5",
         "npm:globals@^16.2.0",
         "npm:kreations@^1.2.5",
+        "npm:lean-qr@^2.5.0",
         "npm:m3-svelte@^4.5.1",
+        "npm:pbf-esm@^4.0.1",
         "npm:prettier-plugin-svelte@^3.4.0",
         "npm:prettier@^3.6.1",
         "npm:school-districts@^1.0.6",

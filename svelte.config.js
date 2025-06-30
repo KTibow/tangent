@@ -11,6 +11,9 @@ const config = {
     adapter: adapter({
       precompress: false,
     }),
+    alias: {
+      codec: "src/routes/chat/messages/codec",
+    },
   },
 };
 

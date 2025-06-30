@@ -25,6 +25,9 @@ export default ts.config(
   },
   {
     files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
+    rules: {
+      "@typescript-eslint/no-unused-expressions": "off",
+    },
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -45,11 +48,19 @@ export default ts.config(
           groups: ["builtin", "external", "internal", "parent", "sibling"],
           pathGroups: [
             {
+              pattern: "$lib",
+              group: "internal",
+            },
+            {
               pattern: "$lib/**",
               group: "internal",
             },
             {
               pattern: "$app/**",
+              group: "internal",
+            },
+            {
+              pattern: "$env/**",
               group: "internal",
             },
           ],

@@ -7,7 +7,7 @@
 
   let overviewing = $state(true);
 
-  const storage: Record<string, string> = $state({});
+  const storage: Record<string, string> = $state({ ready: "yes" });
   setContext("storage", storage);
 
   listen((data) => {

@@ -33,6 +33,7 @@
   background-color: rgb(var(--m3-scheme-background));
   color: rgb(var(--m3-scheme-on-background));
   font-feature-settings: "cv11";
+  interpolate-size: allow-keywords;
   --m3-font: Inter Variable, system-ui, sans-serif;
 }
 ::selection {

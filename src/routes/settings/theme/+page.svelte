@@ -121,7 +121,7 @@ ${lightColors}
 ${darkColors}
 }
 }`;
-    storage[".config/styles.css"] = css;
+    storage[".config/tangent-styles.css"] = css;
   };
 </script>
 

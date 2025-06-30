@@ -22,6 +22,7 @@ jobs:
 
       - name: Build project
         env:
+          DISCORD_KEY: ${{ secrets.DISCORD_KEY }}
           JWT_KEY: ${{ secrets.JWT_KEY }}
         run: deno task build
 

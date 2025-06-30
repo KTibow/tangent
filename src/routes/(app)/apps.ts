@@ -39,7 +39,7 @@ export default [
   },
   {
     name: "Chat",
-    url: "/chat",
+    url: "/chat/discord",
     icon: iconMessages,
   },
   {

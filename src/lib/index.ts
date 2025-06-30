@@ -122,3 +122,4 @@ export const defaultCSS = `@media (prefers-color-scheme: light) {
 --m3-scheme-on-error-container-subtle: 255 135 150;
 }
 }`;
+export const isLikelyFiltered = navigator.userAgent.includes("CrOS");

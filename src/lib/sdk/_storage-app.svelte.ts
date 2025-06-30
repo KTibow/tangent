@@ -30,7 +30,16 @@ export const storage = new Proxy(data, {
 });
 export const handleFullSync = (newStorage: Record<string, string>) => {
   syncing = true;
-  Object.keys(data).forEach((key) => delete data[key]);
-  Object.assign(data, newStorage);
+  for (const key of new Set([...Object.keys(data), ...Object.keys(newStorage)])) {
+    const oldVal = data[key];
+    const newVal = newStorage[key];
+    if (oldVal != newVal) {
+      if (newVal == undefined) {
+        delete data[key];
+      } else {
+        data[key] = newVal;
+      }
+    }
+  }
   syncing = false;
 };
