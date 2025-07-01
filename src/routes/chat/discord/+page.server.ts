@@ -2,15 +2,16 @@ import { CHAT_WEBHOOK, DISCORD_KEY } from "$env/static/private";
 import type { PageServerLoad } from "./$types";
 
 const discordMappings: Record<string, string> = {
-  "794377681331945524": "Kendell R",
-  "702627174112297013": "Ishita A",
   "1008896759814176768": "Adam D",
   "1179676237090783232": "Edward L",
-  "835709580716802108": "Tobin H",
+  "1381764081056350271": "Noel G",
+  "702627174112297013": "Ishita A",
+  "794377681331945524": "Kendell R",
   "799485466109411328": "Nova S",
+  "829164919362158592": "Jax R",
+  "835709580716802108": "Tobin H",
   "852619775099011114": "Tyler H",
   "929547663148478494": "Skyler T",
-  "829164919362158592": "Jax R",
 };
 
 const replacePingsWithNames = (text: string): string => {
