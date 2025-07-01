@@ -23,6 +23,7 @@ jobs:
       - name: Build project
         env:
           DISCORD_KEY: ${{ secrets.DISCORD_KEY }}
+          CHAT_WEBHOOK: ${{ secrets.CHAT_WEBHOOK }}
           JWT_KEY: ${{ secrets.JWT_KEY }}
         run: deno task build
 
