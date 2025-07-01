@@ -1,4 +1,4 @@
-import { DISCORD_KEY } from "$env/static/private";
+import { CHAT_WEBHOOK, DISCORD_KEY } from "$env/static/private";
 import type { PageServerLoad } from "./$types";
 
 const discordMappings: Record<string, string> = {
@@ -58,19 +58,16 @@ export const actions = {
     const content = formData.get("content");
     if (!content) return;
 
-    const r = await fetch(
-      "https://discord.com/api/webhooks/1388659480958603445/cb5Ir-CZew2OPSfB2jFYTYUMs8IZIYD0P3THlpW36ft9zMui4TEO30Nlw5xBgnkY7gFa?wait=true",
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          content,
-        }),
+    const r = await fetch(`${CHAT_WEBHOOK}?wait=true`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        username,
+        content,
+      }),
+    });
     if (!r.ok) throw new Error(`Discord is ${r.status}ing`);
   },
 };
