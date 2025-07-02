@@ -117,7 +117,6 @@
 </script>
 
 <main>
-  <!-- todo: location indicator -->
   {#if messages}
     <div class="messages">
       {#each display(messages) as { type, margin, text, id, reply, start, end, highlight, announcement } (id)}
