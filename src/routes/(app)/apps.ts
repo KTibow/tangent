@@ -43,18 +43,13 @@ export default [
     icon: iconMessages,
   },
   {
-    name: "Files",
-    url: "/files",
-    icon: iconFiles,
-  },
-  {
     name: "Wiki",
-    url: "/files/wiki",
+    url: "/wiki",
     icon: iconWiki,
   },
   {
     name: "Code",
-    url: "/files/code",
+    url: "/code",
     icon: iconCode,
   },
   {

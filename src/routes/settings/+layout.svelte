@@ -1,4 +1,5 @@
 <script lang="ts">
+  import iconComputer from "@ktibow/iconset-material-symbols/computer-rounded";
   import iconFeedback from "@ktibow/iconset-material-symbols/feedback-rounded";
   import iconAbout from "@ktibow/iconset-material-symbols/info-rounded";
   import iconTheme from "@ktibow/iconset-material-symbols/palette";
@@ -10,6 +11,7 @@
 
   let { children }: { children: Snippet } = $props();
   const pages = {
+    Devtools: { icon: iconComputer, href: "/settings/devtools" },
     Authorization: { icon: iconPerson, href: "/settings/authorization" },
     Theme: { icon: iconTheme, href: "/settings/theme" },
     Feedback: { icon: iconFeedback, href: "/settings/feedback" },
