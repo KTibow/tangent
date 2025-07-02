@@ -30,7 +30,6 @@
   src: url("https://rsms.me/inter/font-files/InterVariable-Italic.woff2?v=4.1") format("woff2");
 }
 :root {
-  background-color: rgb(var(--m3-scheme-background));
   color: rgb(var(--m3-scheme-on-background));
   font-feature-settings: "cv11";
   .tnum {

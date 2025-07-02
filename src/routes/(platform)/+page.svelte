@@ -5,7 +5,6 @@
   import Styling from "$lib/sdk/Styling.svelte";
   import { listen } from "$lib/sdk/comms-tangent";
   import Windows from "./Windows.svelte";
-  import "./page.css";
 
   let overviewing = $state(true);
 
@@ -49,5 +48,5 @@
       }
     : undefined}
 />
-<Styling />
+<Styling lowest />
 <Windows bind:overviewing />
