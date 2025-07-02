@@ -128,11 +128,7 @@ textarea,
 }
 ::placeholder {
   opacity: 1;
-}
-@supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
-  ::placeholder {
-    color: color-mix(in oklab, currentcolor 50%, transparent);
-  }
+  color: color-mix(in srgb-linear, currentColor 50%, transparent);
 }
 textarea {
   resize: vertical;

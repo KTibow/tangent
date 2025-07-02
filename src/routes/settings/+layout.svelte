@@ -11,11 +11,11 @@
 
   let { children }: { children: Snippet } = $props();
   const pages = {
-    Devtools: { icon: iconComputer, href: "/settings/devtools" },
-    Authorization: { icon: iconPerson, href: "/settings/authorization" },
-    Theme: { icon: iconTheme, href: "/settings/theme" },
-    Feedback: { icon: iconFeedback, href: "/settings/feedback" },
     About: { icon: iconAbout, href: "/settings/about" },
+    Feedback: { icon: iconFeedback, href: "/settings/feedback" },
+    Theme: { icon: iconTheme, href: "/settings/theme" },
+    Authorization: { icon: iconPerson, href: "/settings/authorization" },
+    Devtools: { icon: iconComputer, href: "/settings/devtools" },
   };
 </script>
 
