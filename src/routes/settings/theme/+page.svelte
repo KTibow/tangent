@@ -11,7 +11,7 @@
   } from "@ktibow/material-color-utilities-nightly";
   import { Button } from "m3-svelte";
   import { browser } from "$app/environment";
-  import { getStorage } from "$lib/sdk/storage";
+  import { getStorage, STYLE_PATH } from "$lib/sdk/storage";
 
   const storage = getStorage();
   const getColors = () => {
@@ -75,7 +75,8 @@
     ];
   };
 
-  let color = $state("#cc63a1");
+  const DEFAULT_COLOR = "#cc63a1";
+  let color = $state(DEFAULT_COLOR);
 
   const generateCSS = () => {
     if (!browser) return;
@@ -124,7 +125,7 @@ ${lightColors}
 ${darkColors}
 }
 }`;
-    storage[".config/tangent-styles.css"] = css;
+    storage[STYLE_PATH] = css;
   };
 </script>
 
@@ -134,10 +135,10 @@ ${darkColors}
   <Button variant="filled" for="color-picker">Pick</Button>
   <Button
     variant="text"
-    disabled={color == "#cc63a1"}
+    disabled={!storage[STYLE_PATH]}
     click={() => {
-      color = "#cc63a1";
-      generateCSS();
+      color = DEFAULT_COLOR;
+      delete storage[STYLE_PATH];
     }}
   >
     Reset

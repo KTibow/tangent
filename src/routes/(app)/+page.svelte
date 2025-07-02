@@ -1,5 +1,7 @@
 <script lang="ts">
   import { setContext } from "svelte";
+  import { browser } from "$app/environment";
+  import { syncObjects } from "$lib/data-management";
   import Styling from "$lib/sdk/Styling.svelte";
   import { listen } from "$lib/sdk/comms-tangent";
   import Windows from "./Windows.svelte";
@@ -18,6 +20,20 @@
       const { key } = data;
       delete storage[key];
     }
+  });
+
+  const syncIn = () => {
+    const newStorage =
+      localStorage["tangent-storage"] && JSON.parse(localStorage["tangent-storage"]);
+    if (!newStorage) return;
+
+    syncObjects(storage, newStorage);
+  };
+  if (browser) {
+    syncIn();
+  }
+  $effect(() => {
+    localStorage["tangent-storage"] = JSON.stringify(storage);
   });
 </script>
 

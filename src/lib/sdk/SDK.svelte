@@ -2,7 +2,7 @@
   import { setContext, type Snippet } from "svelte";
   import "./_sdk.css";
   import Styling from "./Styling.svelte";
-  import { storage, handleFullSync } from "./_storage-app.svelte";
+  import { syncIn, storage } from "./_storage-app.svelte";
   import { listen, send } from "./comms-app";
 
   let { children }: { children: Snippet } = $props();
@@ -11,7 +11,7 @@
 
   if (listen) {
     listen((data) => {
-      if (data.storage) handleFullSync(data.storage);
+      if (data.storage) syncIn(data.storage);
     });
   }
 

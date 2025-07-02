@@ -1,6 +1,7 @@
 <script lang="ts">
   import iconComputer from "@ktibow/iconset-material-symbols/computer-rounded";
   import iconFeedback from "@ktibow/iconset-material-symbols/feedback-rounded";
+  import iconFiles from "@ktibow/iconset-material-symbols/files";
   import iconAbout from "@ktibow/iconset-material-symbols/info-rounded";
   import iconTheme from "@ktibow/iconset-material-symbols/palette";
   import iconPerson from "@ktibow/iconset-material-symbols/person-rounded";
@@ -10,13 +11,20 @@
   import SDK from "$lib/sdk/SDK.svelte";
 
   let { children }: { children: Snippet } = $props();
-  const pages = {
+  const pages = $derived({
     About: { icon: iconAbout, href: "/settings/about" },
     Feedback: { icon: iconFeedback, href: "/settings/feedback" },
     Theme: { icon: iconTheme, href: "/settings/theme" },
     Authorization: { icon: iconPerson, href: "/settings/authorization" },
-    Devtools: { icon: iconComputer, href: "/settings/devtools" },
-  };
+    ...(page.url.pathname.startsWith("/settings/devtools")
+      ? {
+          "Dev: files": { icon: iconFiles, href: "/settings/devtools/files" },
+          // TODO: more
+        }
+      : {
+          "Dev: tools": { icon: iconComputer, href: "/settings/devtools/files" },
+        }),
+  });
 </script>
 
 <SDK>
