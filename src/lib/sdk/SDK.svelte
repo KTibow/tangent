@@ -3,17 +3,12 @@
   import "./_sdk.css";
   import Styling from "./Styling.svelte";
   import { syncIn, storage } from "./_storage-app.svelte";
-  import { listen, send } from "./comms-app";
+  import type { FromTangent } from "./comms";
+  import { send } from "./comms-app";
 
   let { children }: { children: Snippet } = $props();
 
   setContext("storage", storage);
-
-  if (listen) {
-    listen((data) => {
-      if (data.storage) syncIn(data.storage);
-    });
-  }
 
   const shouldRefocus = (e: KeyboardEvent) => {
     if (e.ctrlKey) return false;
@@ -36,6 +31,10 @@
 </script>
 
 <svelte:window
+  onmessage={(e) => {
+    const data = e.data as FromTangent;
+    if (data.storage) syncIn(data.storage);
+  }}
   onkeydown={(e) => {
     if (!shouldRefocus(e)) return;
 

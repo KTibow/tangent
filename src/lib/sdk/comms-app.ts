@@ -1,12 +1,5 @@
-import type { FromTangent, FromApp } from "./comms";
+import type { FromApp } from "./comms";
 
-const addEventListener = typeof window == "object" && window.addEventListener;
-
-export const listen = addEventListener
-  ? (listener: (data: FromTangent) => void) => {
-      addEventListener("message", (e) => listener(e.data));
-    }
-  : undefined;
 export const send =
   typeof parent == "object"
     ? (data: FromApp) => {
