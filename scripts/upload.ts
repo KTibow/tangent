@@ -348,6 +348,16 @@ function serve(path, client = false) {
     // await Deno.writeTextFile("debug.js", content);
   }
 
+  // Make sure other files fit in
+  if (content.length > 80000) {
+    const result = await transform(content, {
+      format: "esm",
+      treeShaking: true,
+      minify: true,
+    });
+    content = result.code;
+  }
+
   // Return content for other files
   return { content, fileType: "file" };
 }
