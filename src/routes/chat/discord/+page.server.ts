@@ -3,7 +3,7 @@ import type { PageServerLoad } from "./$types";
 
 const discordMappings: Record<string, string> = {
   "1008896759814176768": "Adam D",
-  "1179676237090783232": "Edward L",
+  "1258134607753117818": "Sumarth P",
   "1381764081056350271": "Noel G",
   "702627174112297013": "Ishita A",
   "794377681331945524": "Kendell R",
@@ -12,6 +12,8 @@ const discordMappings: Record<string, string> = {
   "835709580716802108": "Tobin H",
   "852619775099011114": "Tyler H",
   "929547663148478494": "Skyler T",
+  "957414292687298590": "Ewan A",
+  "992851154327326750": "Edward K",
 };
 
 const replacePingsWithNames = (text: string): string => {
