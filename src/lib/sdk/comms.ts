@@ -4,5 +4,6 @@ export type FromApp =
   | { type: "mousemove"; x: number; y: number }
   | { type: "storage-set"; key: string; value: string }
   | { type: "storage-delete"; key: string }
+  | { type: "ready" }
   | { type: "close" }
-  | { type: "ready" };
+  | { type: "launch"; name: string; popup: boolean };

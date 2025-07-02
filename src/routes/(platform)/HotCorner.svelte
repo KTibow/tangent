@@ -39,15 +39,13 @@
   listen((data) => {
     if (data.type == "keyup-alt") {
       overviewing = !overviewing;
-    } else if (data.type == "mousemove") {
-      mouse = { x: data.x, y: data.y };
     }
   });
 </script>
 
 <svelte:window
   onmousemove={(e) => {
-    mouse = { x: e.pageX, y: e.pageY };
+    mouse = { x: e.clientX, y: e.clientY };
   }}
   onkeyup={(e) => {
     if (e.key == "Alt") {
@@ -57,7 +55,7 @@
 />
 <svelte:body
   onmouseleave={(e) => {
-    mouse = { x: e.pageX, y: e.pageY };
+    mouse = { x: e.clientX, y: e.clientY };
   }}
 />
 <button

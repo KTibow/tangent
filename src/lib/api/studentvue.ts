@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import districts from "school-districts";
 
 const build = (object: Record<string, string>) => {
   const params = new URLSearchParams();
@@ -9,6 +10,19 @@ const build = (object: Record<string, string>) => {
 };
 const parser = new XMLParser({ ignoreAttributes: false });
 
+export const convertAuth = (auth: string | undefined) => {
+  if (!auth) throw new Error("Sign in first.");
+
+  const { email, password } = JSON.parse(auth);
+  const [id, domain] = email.split("@");
+
+  const district = districts[domain];
+  if (!district) throw new Error(`Send feedback: request support for ${domain}.`);
+  const host = district.apps.find((x) => x.app == "StudentVue")?.host;
+  if (!host) throw new Error(`This needs StudentVue, and ${domain} doesn't have StudentVue.`);
+
+  return [host, id, password] as const;
+};
 export default async (
   host: string,
   userID: string,

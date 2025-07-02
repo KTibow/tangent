@@ -33,6 +33,9 @@
   background-color: rgb(var(--m3-scheme-background));
   color: rgb(var(--m3-scheme-on-background));
   font-feature-settings: "cv11";
+  .tnum {
+    font-feature-settings: "cv11", "tnum";
+  }
   interpolate-size: allow-keywords;
   --m3-font: Inter Variable, system-ui, sans-serif;
 }
@@ -50,7 +53,12 @@ body {
 }
 button,
 select {
-  cursor: pointer;
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+}
+dialog {
+  margin: auto;
 }
 ::view-transition-group(*),
 ::view-transition-old(*),

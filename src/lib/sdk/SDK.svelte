@@ -9,6 +9,7 @@
   let { children }: { children: Snippet } = $props();
 
   setContext("storage", storage);
+  send?.({ type: "ready" });
 
   const shouldRefocus = (e: KeyboardEvent) => {
     if (e.ctrlKey) return false;

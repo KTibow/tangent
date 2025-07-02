@@ -12,7 +12,7 @@ const config = {
       precompress: false,
     }),
     alias: {
-      codec: "src/routes/chat/messages/codec",
+      codec: "src/routes/(apps)/chat/messages/codec",
     },
   },
 };

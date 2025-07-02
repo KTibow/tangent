@@ -7,4 +7,3 @@ export const send =
       }
     : undefined;
 export const requestClose = () => send?.({ type: "close" });
-send?.({ type: "ready" });

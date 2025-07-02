@@ -10,11 +10,13 @@
     backgroundScale,
     windows = $bindable(),
     windowOrder = $bindable(),
+    launch,
   }: {
     overviewing: boolean;
     backgroundScale: number;
     windows: TangentWindow[];
     windowOrder: string[];
+    launch: (app: TangentApp, popup: boolean) => void;
   } = $props();
 
   $effect(() => {
@@ -24,11 +26,6 @@
     }
   });
 
-  const launchApp = (app: TangentApp) => {
-    const window = { id: crypto.randomUUID(), app, x: 0, y: 0, w: innerWidth, h: innerHeight };
-    windows.push(window);
-    windowOrder.push(window.id);
-  };
   const openApp = (app: TangentApp) => {
     if (windows.some((w) => w.app.url == app.url)) {
       // Move all to front
@@ -37,7 +34,7 @@
       windowOrder.push(...windowIds);
       return;
     }
-    launchApp(app);
+    launch(app, false);
   };
 </script>
 
@@ -47,7 +44,7 @@
 <div class="background" class:overviewing style:--background-scale={backgroundScale}></div>
 <div class="dock" inert={!overviewing}>
   <!-- todo: customization -->
-  {#each apps as app (app.url)}
+  {#each apps.filter((a) => !a.internal) as app (app.name)}
     <button
       class="no-overview-interaction"
       onpointerover={() => {
@@ -55,7 +52,7 @@
       }}
       onclick={(e) => {
         if (e.ctrlKey) {
-          launchApp(app);
+          launch(app, false);
         } else {
           openApp(app);
           overviewing = false;

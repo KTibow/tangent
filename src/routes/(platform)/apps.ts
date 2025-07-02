@@ -2,8 +2,8 @@ import type { IconifyIcon } from "@iconify/types";
 import iconWiki from "@ktibow/iconset-material-symbols/book-2-rounded";
 import iconCode from "@ktibow/iconset-material-symbols/code-rounded";
 import iconMessages from "@ktibow/iconset-material-symbols/comment-rounded";
-import iconFiles from "@ktibow/iconset-material-symbols/files";
 import iconWeb from "@ktibow/iconset-material-symbols/language";
+import iconHuman from "@ktibow/iconset-material-symbols/person-rounded";
 import iconSettings from "@ktibow/iconset-material-symbols/settings-rounded";
 import iconSchool from "@ktibow/iconset-material-symbols/source-environment-rounded";
 const iconAi = {
@@ -12,7 +12,7 @@ const iconAi = {
   body: `<path fill="currentColor" d="m13 2a9.5 9.5 0 009 9 .5.5 0 010 2 9.5 9.5 0 00-9 9 .5.5 0 01-2 0 9.5 9.5 0 00-9-9 .5.5 0 010-2 9.5 9.5 0 009-9 .5.5 0 012 0"/>`,
 };
 
-export type TangentApp = { name: string; url: string; icon: IconifyIcon };
+export type TangentApp = { name: string; url: string; icon: IconifyIcon; internal?: boolean };
 export type TangentWindow = {
   app: TangentApp;
   id: string;
@@ -56,5 +56,11 @@ export default [
     name: "Settings",
     url: "/settings/about",
     icon: iconSettings,
+  },
+  {
+    name: "Authorization",
+    url: "/authorization",
+    icon: iconHuman,
+    internal: true,
   },
 ];

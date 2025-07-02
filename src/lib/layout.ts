@@ -39,7 +39,7 @@ type Row = {
   additionalScale?: number;
 };
 
-export default function layoutWindows(
+export default function (
   windows: WindowInput[],
   area: LayoutArea,
   options: LayoutOptions = {},

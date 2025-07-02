@@ -1,3 +1,5 @@
+import { onMount } from "svelte";
+
 export const defaultCSS = `@media (prefers-color-scheme: light) {
 :root, ::backdrop {
 --m3-scheme-background: 255 243 249;
@@ -123,3 +125,17 @@ export const defaultCSS = `@media (prefers-color-scheme: light) {
 }
 }`;
 export const isLikelyFiltered = navigator.userAgent.includes("CrOS");
+export const whileMounted = (fn: () => void) => {
+  onMount(() => {
+    fn();
+    const id = setInterval(fn, 5000);
+    return () => clearInterval(id);
+  });
+};
+export const ordinal = /* @__PURE__ */ (n: number) => {
+  if (n == 0) return "0";
+  if (n == 1) return n + "st";
+  if (n == 2) return n + "nd";
+  if (n == 3) return n + "rd";
+  return n + "th";
+};

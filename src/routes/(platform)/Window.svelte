@@ -13,22 +13,26 @@
     y,
     w,
     h,
+    full,
     scale,
     overviewing,
     index,
     close,
     select,
+    launch,
   }: {
     app: TangentApp;
     x: number;
     y: number;
     w: number;
     h: number;
+    full: boolean;
     scale?: number;
     overviewing: boolean;
     index: number;
     close: () => void;
     select: () => void;
+    launch: (name: string, popup: boolean) => void;
   } = $props();
 
   const storage = getStorage();
@@ -44,6 +48,17 @@
         isReady = true;
       } else if (data.type == "close") {
         close();
+      } else if (data.type == "launch") {
+        launch(data.name, data.popup);
+      } else if (data.type == "mousemove") {
+        const mouseX = data.x + x;
+        const mouseY = data.y + y;
+        window.dispatchEvent(
+          new MouseEvent("mousemove", {
+            clientX: mouseX,
+            clientY: mouseY,
+          }),
+        );
       }
     });
   });
@@ -58,6 +73,7 @@
 <div
   class="app no-overview-interaction"
   class:overviewing
+  class:full
   style:translate="{x}px {y}px"
   style:width="{w}px"
   style:height="{h}px"
@@ -101,13 +117,17 @@
 
     user-select: none;
     transition:
+      box-shadow var(--m3-util-easing-fast),
       scale var(--m3-util-easing-fast),
       translate var(--m3-util-easing-fast);
 
+    &:not(.full) {
+      box-shadow: var(--m3-util-elevation-5);
+      border-radius: var(--m3-util-rounding-large);
+    }
     &.overviewing {
       cursor: pointer;
       scale: var(--scale);
-      border-radius: var(--m3-util-rounding-medium);
       &:hover {
         scale: calc(var(--scale) * 1.01);
         z-index: 1000;
