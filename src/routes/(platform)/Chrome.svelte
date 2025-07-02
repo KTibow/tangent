@@ -2,8 +2,11 @@
   import { Layer } from "m3-svelte";
   import { preloadData } from "$app/navigation";
   import Icon from "$lib/Icon.svelte";
+  import { require } from "$lib/gates/check";
+  import { getStorage } from "$lib/sdk/storage";
   import HotCorner from "./HotCorner.svelte";
   import apps, { type TangentApp, type TangentWindow } from "./apps";
+  import { browser } from "$app/environment";
 
   let {
     overviewing = $bindable(),
@@ -18,6 +21,8 @@
     windowOrder: string[];
     launch: (app: TangentApp, popup: boolean) => void;
   } = $props();
+
+  const storage = getStorage();
 
   $effect(() => {
     if (!windowOrder.length) {
@@ -42,32 +47,37 @@
   <HotCorner bind:overviewing />
 {/if}
 <div class="background" class:overviewing style:--background-scale={backgroundScale}></div>
-<div class="dock" inert={!overviewing}>
-  <!-- todo: customization -->
-  {#each apps.filter((a) => !a.internal) as app (app.name)}
-    <button
-      class="no-overview-interaction"
-      onpointerover={() => {
-        preloadData(app.url);
-      }}
-      onclick={(e) => {
-        if (e.ctrlKey) {
-          launch(app, false);
-        } else {
-          openApp(app);
-          overviewing = false;
-        }
-      }}
-    >
-      <Layer />
-      <Icon icon={app.icon} width="1.5rem" height="1.5rem" />
-      <p class="tooltip m3-font-label-small">{app.name}</p>
-      {#if windows.some((w) => w.app.url == app.url)}
-        <div class="indicator"></div>
-      {/if}
-    </button>
-  {/each}
-</div>
+{#if browser}
+  <div class="dock" inert={!overviewing}>
+    <!-- todo: customization -->
+    {#each apps
+      .filter((app) => !app.internal)
+      .filter((app) => (app.hideIfNo ? require(storage, app.hideIfNo) : true)) as app (app.name)}
+      <button
+        class="no-overview-interaction"
+        class:gray={app.grayIfNo && !require(storage, app.grayIfNo)}
+        onpointerover={() => {
+          preloadData(app.url);
+        }}
+        onclick={(e) => {
+          if (e.ctrlKey) {
+            launch(app, false);
+          } else {
+            openApp(app);
+            overviewing = false;
+          }
+        }}
+      >
+        <Layer />
+        <Icon icon={app.icon} width="1.5rem" height="1.5rem" />
+        <p class="tooltip m3-font-label-small">{app.name}</p>
+        {#if windows.some((w) => w.app.url == app.url)}
+          <div class="indicator"></div>
+        {/if}
+      </button>
+    {/each}
+  </div>
+{/if}
 
 <style>
   .background {
@@ -102,6 +112,10 @@
     border-radius: inherit;
 
     position: relative;
+
+    &.gray {
+      opacity: 0.5;
+    }
   }
   button > :global(svg) {
     color: rgb(var(--m3-scheme-primary));

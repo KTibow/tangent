@@ -1,7 +1,7 @@
 <script>
-  import AuthWithDistrictGate from "$lib/gates/AuthWithDistrictGate.svelte";
+  import AuthWithConnectGate from "$lib/gates/AuthWithConnectGate.svelte";
 
   let { children } = $props();
 </script>
 
-<AuthWithDistrictGate {children} />
+<AuthWithConnectGate {children} />

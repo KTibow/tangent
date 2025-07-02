@@ -5,3 +5,4 @@ export const getStorage = (): Record<string, string> => {
 };
 export const STYLE_PATH = ".config/tangent-styles.css";
 export const AUTH_PATH = ".config/tangent-auth.json";
+export const VERIFICATION_PATH = ".config/tangent-verification.jwt";

@@ -12,7 +12,14 @@ const iconAi = {
   body: `<path fill="currentColor" d="m13 2a9.5 9.5 0 009 9 .5.5 0 010 2 9.5 9.5 0 00-9 9 .5.5 0 01-2 0 9.5 9.5 0 00-9-9 .5.5 0 010-2 9.5 9.5 0 009-9 .5.5 0 012 0"/>`,
 };
 
-export type TangentApp = { name: string; url: string; icon: IconifyIcon; internal?: boolean };
+export type TangentApp = {
+  name: string;
+  url: string;
+  icon: IconifyIcon;
+  hideIfNo?: "authorization" | "connection" | "verification";
+  grayIfNo?: "authorization" | "connection" | "verification";
+  internal?: boolean;
+};
 export type TangentWindow = {
   app: TangentApp;
   id: string;
@@ -26,16 +33,20 @@ export default [
     name: "School",
     url: "/school",
     icon: iconSchool,
+    grayIfNo: "connection",
   },
   {
     name: "Web",
     url: "/web",
     icon: iconWeb,
+    hideIfNo: "authorization",
+    grayIfNo: "verification",
   },
   {
     name: "AI",
     url: "/ai",
     icon: iconAi,
+    grayIfNo: "verification",
   },
   {
     name: "Chat",
@@ -63,4 +74,4 @@ export default [
     icon: iconHuman,
     internal: true,
   },
-];
+] satisfies TangentApp[];
