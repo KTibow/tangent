@@ -6,9 +6,11 @@
   import { send } from "$lib/sdk/comms-app";
   import { AUTH_PATH, getStorage } from "$lib/sdk/storage";
   import EmailInput from "./EmailInput.svelte";
+  import districts from "school-districts";
 
   const storage = getStorage();
   let auth = $derived(storage[AUTH_PATH]);
+  let districtCount = $derived(Object.keys(districts).length);
 
   let email = $state("");
   let password = $state("");
@@ -44,6 +46,10 @@
     />
     <Button variant="filled">Store</Button>
   </form>
+  <p class="note">
+    Tangent currently supports {districtCount}
+    {districtCount == 1 ? "district" : "districts"}.
+  </p>
 {/if}
 
 <style>
@@ -54,6 +60,10 @@
     display: flex;
     gap: 0.25rem;
     align-items: center;
+    &.note {
+      opacity: 0.8;
+      margin-top: auto;
+    }
   }
   form {
     display: flex;

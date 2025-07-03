@@ -5,7 +5,7 @@
   import { preloadData } from "$app/navigation";
   import Icon from "$lib/Icon.svelte";
   import { require } from "$lib/gates/check";
-  import { getStorage } from "$lib/sdk/storage";
+  import { AUTH_PATH, getStorage } from "$lib/sdk/storage";
   import HotCorner from "./HotCorner.svelte";
   import apps, { type TangentApp, type TangentWindow } from "./apps";
 
@@ -68,7 +68,12 @@
           {unavailableApps.length == 1 ? "app" : "apps"}
         </button>
       {:else if !require(storage, "connection")}
-        <form method="post" action="/settings/feedback">
+        <form method="post" action="/request-district">
+          <input
+            type="hidden"
+            name="domain"
+            value={JSON.parse(storage[AUTH_PATH]).email.split("@")[1]}
+          />
           <button class="account">
             <Layer />
             <Icon icon={iconAccount} />

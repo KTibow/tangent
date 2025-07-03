@@ -15,5 +15,6 @@
     flex-direction: column;
     padding: 1.5rem;
     padding-top: var(--top-inset);
+    flex-grow: 1;
   }
 </style>
