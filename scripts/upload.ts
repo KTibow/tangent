@@ -30,18 +30,21 @@ async function process(
 
   // Process index.js (convert to Val Town HTTP val)
   if (normalizedPath === "index.js") {
-    async function simpleHash(str: string) {
+    async function getEtag(str: string) {
       const encoder = new TextEncoder();
       const data = encoder.encode(str);
       const hashBuffer = await crypto.subtle.digest("SHA-256", data);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("")
-        .slice(0, 16);
+      return (
+        "W/" +
+        hashArray
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("")
+          .slice(0, 16)
+      );
     }
     const indexText = await fs.promises.readFile("build/prerendered/index.html", "utf8");
-    const indexHash = await simpleHash(indexText);
+    const indexHash = await getEtag(indexText);
     const valTownContent = js`import { handler } from "./handler.js";
 import { EventEmitter } from "node:events";
 
@@ -228,7 +231,7 @@ function serve(path, client = false) {
     const data = encoder.encode(str);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
+    return "W/" + hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
   }
 
   // Helper function to determine content type
@@ -270,7 +273,7 @@ function serve(path, client = false) {
       const content = await readFile(fullPath, import.meta.url);
 
       // Generate simple etag from content hash
-      const etag = \`W/"\${await simpleHash(content)}"\`;
+      const etag = await getEtag(content);
 
       // Check if client has matching etag
       const clientEtag = req.headers['if-none-match'];
