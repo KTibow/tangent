@@ -1,7 +1,7 @@
 <script>
-  import AuthWithConnectGate from "$lib/gates/AuthWithConnectGate.svelte";
+  import StorageGate from "$lib/gates/StorageGate.svelte";
 
   let { children } = $props();
 </script>
 
-<AuthWithConnectGate {children} />
+<StorageGate>{@render children()}</StorageGate>

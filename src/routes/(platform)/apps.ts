@@ -16,8 +16,7 @@ export type TangentApp = {
   name: string;
   url: string;
   icon: IconifyIcon;
-  hideIfNo?: "authorization" | "connection" | "verification";
-  grayIfNo?: "authorization" | "connection" | "verification";
+  requires?: "authorization" | "connection" | "verification";
   internal?: boolean;
 };
 export type TangentWindow = {
@@ -33,20 +32,19 @@ export default [
     name: "School",
     url: "/school",
     icon: iconSchool,
-    grayIfNo: "connection",
+    requires: "connection",
   },
   {
     name: "Web",
     url: "/web",
     icon: iconWeb,
-    hideIfNo: "authorization",
-    grayIfNo: "verification",
+    requires: "verification",
   },
   {
     name: "AI",
     url: "/ai",
     icon: iconAi,
-    grayIfNo: "verification",
+    requires: "verification",
   },
   {
     name: "Chat",
@@ -65,12 +63,18 @@ export default [
   },
   {
     name: "Settings",
-    url: "/settings/about",
+    url: "/settings/feedback",
     icon: iconSettings,
   },
   {
     name: "Authorization",
     url: "/authorization",
+    icon: iconHuman,
+    internal: true,
+  },
+  {
+    name: "Verification",
+    url: "/verification",
     icon: iconHuman,
     internal: true,
   },

@@ -1,12 +1,13 @@
 <script lang="ts">
+  import iconAccount from "@ktibow/iconset-material-symbols/account-circle";
   import { Layer } from "m3-svelte";
+  import { browser } from "$app/environment";
   import { preloadData } from "$app/navigation";
   import Icon from "$lib/Icon.svelte";
   import { require } from "$lib/gates/check";
   import { getStorage } from "$lib/sdk/storage";
   import HotCorner from "./HotCorner.svelte";
   import apps, { type TangentApp, type TangentWindow } from "./apps";
-  import { browser } from "$app/environment";
 
   let {
     overviewing = $bindable(),
@@ -31,6 +32,12 @@
     }
   });
 
+  const filteredApps = apps.filter((a) => !a.internal);
+  let [dock, unavailableApps] = $derived([
+    filteredApps.filter((app) => !(app.requires && !require(storage, app.requires))),
+    filteredApps.filter((app) => app.requires && !require(storage, app.requires)),
+  ]);
+
   const openApp = (app: TangentApp) => {
     if (windows.some((w) => w.app.url == app.url)) {
       // Move all to front
@@ -48,34 +55,64 @@
 {/if}
 <div class="background" class:overviewing style:--background-scale={backgroundScale}></div>
 {#if browser}
-  <div class="dock" inert={!overviewing}>
-    <!-- todo: customization -->
-    {#each apps
-      .filter((app) => !app.internal)
-      .filter((app) => (app.hideIfNo ? require(storage, app.hideIfNo) : true)) as app (app.name)}
-      <button
-        class="no-overview-interaction"
-        class:gray={app.grayIfNo && !require(storage, app.grayIfNo)}
-        onpointerover={() => {
-          preloadData(app.url);
-        }}
-        onclick={(e) => {
-          if (e.ctrlKey) {
-            launch(app, false);
-          } else {
-            openApp(app);
-            overviewing = false;
-          }
-        }}
-      >
-        <Layer />
-        <Icon icon={app.icon} width="1.5rem" height="1.5rem" />
-        <p class="tooltip m3-font-label-small">{app.name}</p>
-        {#if windows.some((w) => w.app.url == app.url)}
-          <div class="indicator"></div>
-        {/if}
-      </button>
-    {/each}
+  <div class="dock-area">
+    {#if unavailableApps.length}
+      {#if !require(storage, "authorization")}
+        <button
+          class="account"
+          onclick={() => launch(apps.find((a) => a.name == "Authorization")!, true)}
+        >
+          <Layer />
+          <Icon icon={iconAccount} />
+          Add authorization to open {unavailableApps.length}
+          {unavailableApps.length == 1 ? "app" : "apps"}
+        </button>
+      {:else if !require(storage, "connection")}
+        <form method="post" action="/settings/feedback">
+          <button class="account">
+            <Layer />
+            <Icon icon={iconAccount} />
+            Request support for your school district
+          </button>
+        </form>
+      {:else if !require(storage, "verification")}
+        <button
+          class="account"
+          onclick={() => launch(apps.find((a) => a.name == "Verification")!, true)}
+        >
+          <Layer />
+          <Icon icon={iconAccount} />
+          Verify to open {unavailableApps.length}
+          {unavailableApps.length == 1 ? "app" : "apps"}
+        </button>
+      {/if}
+    {/if}
+    <div class="dock" inert={!overviewing}>
+      <!-- todo: customization -->
+      {#each dock as app (app.name)}
+        <button
+          class="app no-overview-interaction"
+          onpointerover={() => {
+            preloadData(app.url);
+          }}
+          onclick={(e) => {
+            if (e.ctrlKey) {
+              launch(app, false);
+            } else {
+              openApp(app);
+              overviewing = false;
+            }
+          }}
+        >
+          <Layer />
+          <Icon icon={app.icon} width="1.5rem" height="1.5rem" />
+          <p class="tooltip m3-font-label-small">{app.name}</p>
+          {#if windows.some((w) => w.app.url == app.url)}
+            <div class="indicator"></div>
+          {/if}
+        </button>
+      {/each}
+    </div>
   </div>
 {/if}
 
@@ -92,18 +129,40 @@
     }
   }
 
-  .dock {
+  .dock-area {
     display: flex;
     height: 5rem;
-    background-color: rgb(var(--m3-scheme-surface-container-highest));
-    border-radius: 1rem;
+    gap: 0.5rem;
 
     position: absolute;
     left: 50%;
     bottom: 3rem;
     translate: -50% 50%;
   }
-  button {
+  form {
+    display: contents;
+  }
+  .account {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgb(var(--m3-scheme-secondary-container));
+    color: rgb(var(--m3-scheme-on-secondary-container));
+    border-radius: 1rem;
+    padding: 1rem;
+    position: relative;
+
+    > :global(svg) {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  .dock {
+    display: flex;
+    background-color: rgb(var(--m3-scheme-surface-container-highest));
+    border-radius: 1rem;
+  }
+  .app {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -112,12 +171,8 @@
     border-radius: inherit;
 
     position: relative;
-
-    &.gray {
-      opacity: 0.5;
-    }
   }
-  button > :global(svg) {
+  .app > :global(svg) {
     color: rgb(var(--m3-scheme-primary));
   }
   p {
