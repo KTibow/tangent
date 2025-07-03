@@ -52,7 +52,7 @@ export default async function (req) {
   const url = new URL(req.url);
   if (url.pathname == "/") {
     // Check if client has matching etag
-    const clientEtag = req.headers['if-none-match'];
+    const clientEtag = req.headers.get("if-none-match");
     if (clientEtag == ${JSON.stringify(indexHash)}) {
       return new Response(null, { status: 304 });
     }
@@ -226,7 +226,7 @@ ${content}`;
       js`
 function serve(path, client = false) {
   // Simple hash function for etag generation
-  async function simpleHash(str) {
+  async function getEtag(str) {
     const encoder = new TextEncoder();
     const data = encoder.encode(str);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
