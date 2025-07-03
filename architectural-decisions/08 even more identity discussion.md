@@ -1,6 +1,7 @@
 # What does identity and authentication look like in practice?
 
 Apps might need many different things:
+
 - A username and password that works for a certain service
 - A verified name
 - Just "this is the user's identity, they're real"
