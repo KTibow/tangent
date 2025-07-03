@@ -20,14 +20,41 @@ async function process(
     return undefined; // Don't upload
   }
 
-  const js = (strings: TemplateStringsArray) => strings[0];
+  // Skip prerendered (will be inlined)
+  if (normalizedPath.startsWith("prerendered/")) {
+    return undefined; // Don't upload
+  }
+
+  const js = (strings: TemplateStringsArray, ...values: string[]) =>
+    String.raw({ raw: strings }, ...values);
 
   // Process index.js (convert to Val Town HTTP val)
   if (normalizedPath === "index.js") {
+    async function simpleHash(str: string) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(str);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("")
+        .slice(0, 16);
+    }
+    const indexText = await fs.promises.readFile("build/prerendered/index.html", "utf8");
+    const indexHash = await simpleHash(indexText);
     const valTownContent = js`import { handler } from "./handler.js";
 import { EventEmitter } from "node:events";
 
 export default async function (req) {
+  const url = new URL(req.url);
+  if (url.pathname == "/") {
+    // Check if client has matching etag
+    const clientEtag = req.headers['if-none-match'];
+    if (clientEtag == ${JSON.stringify(indexHash)}) {
+      return new Response(null, { status: 304 });
+    }
+    return new Response(${JSON.stringify(indexText)}, { headers: { "content-type": "text/html", "etag": ${JSON.stringify(indexHash)} } });
+  }
   return new Promise((resolve, reject) => {
     let controller;
     let stream;
@@ -139,7 +166,6 @@ export default async function (req) {
     });
 
     // Create a proper mock request
-    const url = new URL(req.url);
     const mockReq = {
       method: req.method,
       url: url.pathname + url.search,
