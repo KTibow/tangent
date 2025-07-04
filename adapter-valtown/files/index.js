@@ -62,22 +62,26 @@ export default async function (request) {
       throw new Error(`continue: asset ${response.status}`);
     }
 
-    const headers = new Headers(response.headers);
-
-    headers.set("content-type", getContentType(pathname));
-
-    // Add immutable cache headers for _app/immutable assets
-    if (pathname.includes("/_app/immutable/")) {
-      headers.set("cache-control", "public,max-age=31536000,immutable");
+    const version = import.meta.url.split("@")[1].split("/")[0];
+    const etag = `W/"v${version}"`;
+    const etagRequest = request.headers.get("if-none-match");
+    if (etagRequest && etagRequest == etag) {
+      return new Response(null, {
+        status: 304,
+      });
     }
 
+    const headers = new Headers();
+    headers.set("content-type", getContentType(pathname));
+    headers.set("etag", etag);
+    if (pathname.startsWith("/_app/immutable/")) {
+      headers.set("cache-control", "public,max-age=31536000,immutable");
+    }
     return new Response(response.body, {
       status: response.status,
       headers,
     });
-  } catch (e) {
-    // return Response.json({ e: e.toString() });
-  }
+  } catch {}
 
   // Handle everything else with SvelteKit SSR
   const server = await serverPromise;
