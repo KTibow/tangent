@@ -46,6 +46,15 @@ export default async function (request) {
       throw new Error("continue: not valid");
     }
 
+    const version = import.meta.url.split("@")[1].split("/")[0];
+    const etag = `W/"v${version}"`;
+    const etagRequest = request.headers.get("if-none-match");
+    if (etagRequest && etagRequest == etag) {
+      return new Response(null, {
+        status: 304,
+      });
+    }
+
     const url =
       import.meta.url.split("/").slice(0, -1).join("/") +
       "/" +
@@ -60,15 +69,6 @@ export default async function (request) {
 
     if (!response.ok) {
       throw new Error(`continue: asset ${response.status}`);
-    }
-
-    const version = import.meta.url.split("@")[1].split("/")[0];
-    const etag = `W/"v${version}"`;
-    const etagRequest = request.headers.get("if-none-match");
-    if (etagRequest && etagRequest == etag) {
-      return new Response(null, {
-        status: 304,
-      });
     }
 
     const headers = new Headers();
