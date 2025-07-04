@@ -1,6 +1,5 @@
 import { writeFileSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import path from "node:path";
 import { build } from "npm:esbuild";
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);
@@ -9,7 +8,7 @@ export default function (opts = {}) {
   const { out = "build" } = opts;
 
   return {
-    name: "@sveltejs/adapter-valtown",
+    name: "Val Town",
 
     async adapt(builder) {
       const tmp = builder.getBuildDirectory("adapter-valtown");
@@ -25,38 +24,38 @@ export default function (opts = {}) {
       // Write server files to temp directory
       builder.writeServer(tmp);
 
-      // Generate manifest
+      // Make the actual server
       writeFileSync(
         `${tmp}/manifest.js`,
-        `export const manifest = ${builder.generateManifest({
+        `export default ${builder.generateManifest({
           relativePath: "./",
-        })};
-
-export const base_path = ${JSON.stringify(builder.config.kit.paths.base)};
-`,
+        })};`,
+      );
+      writeFileSync(
+        `${tmp}/base_path.js`,
+        `export default ${JSON.stringify(builder.config.kit.paths.base)};`,
       );
 
-      // Bundle server files with esbuild
+      builder.copy(`${files}/index.js`, `${tmp}/val.js`, {
+        replace: {
+          BASE_PATH: "./base_path.js",
+          SERVER: "./index.js",
+          MANIFEST: "./manifest.js",
+        },
+      });
+
+      // Bundle the server
       builder.log.minor("Bundling server");
-      builder.mkdirp(`${out}/server`);
 
       await build({
-        entryPoints: [`${tmp}/index.js`, `${tmp}/manifest.js`],
-        outdir: `${out}/server`,
+        entryPoints: [`${tmp}/val.js`],
+        outdir: out,
         format: "esm",
         splitting: true,
         bundle: true,
         minify: true,
         treeShaking: true,
         chunkNames: "chunks/[name]-[hash]",
-      });
-
-      // Copy HTTP val entry point
-      builder.copy(`${files}/index.js`, `${out}/index.js`, {
-        replace: {
-          SERVER: "./server/index.js",
-          MANIFEST: "./server/manifest.js",
-        },
       });
 
       builder.log.minor("Generated Val Town HTTP handler");

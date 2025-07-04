@@ -1,8 +1,14 @@
-import { Server } from "SERVER";
-import { manifest, base_path } from "MANIFEST";
+import base_path from "BASE_PATH";
 
-const server = new Server(manifest);
-await server.init({ env: Deno.env.toObject() });
+let serverPromise = (async () => {
+  const [{ Server }, { default: manifest }] = await Promise.all([
+    import("SERVER"),
+    import("MANIFEST"),
+  ]);
+  const server = new Server(manifest);
+  await server.init({ env: Deno.env.toObject() });
+  return server;
+})();
 
 const getContentType = (filePath) => {
   const ext = filePath.split(".").at(-1).toLowerCase();
@@ -74,14 +80,11 @@ export default async function (request) {
   }
 
   // Handle everything else with SvelteKit SSR
-  // try {
+  const server = await serverPromise;
   const response = await server.respond(request, {
     platform: {},
     getClientAddress: () => request.headers.get("cf-connecting-ip") || "127.0.0.1",
   });
 
   return response;
-  // } catch (e) {
-  //   return new Response("Internal Server Error", { status: 500 });
-  // }
 }

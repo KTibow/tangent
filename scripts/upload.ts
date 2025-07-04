@@ -23,24 +23,10 @@ async function process(
   const js = (strings: TemplateStringsArray, ...values: string[]) =>
     String.raw({ raw: strings }, ...values);
 
-  // Process index.js (HTTP val entry point)
-  if (normalizedPath === "index.js") {
+  // Process val.js (HTTP val entry point)
+  if (normalizedPath === "val.js") {
     // The adapter already generates the HTTP val entry point, just mark it as http type
     return { content, fileType: "http" };
-  }
-
-  // Process server/index.js
-  if (normalizedPath === "server/index.js") {
-    const result = await transform(content, {
-      platform: "node",
-      target: "deno2",
-      format: "esm",
-      treeShaking: true,
-      minifySyntax: true,
-      minifyWhitespace: true,
-      minifyIdentifiers: true,
-    });
-    content = result.code;
   }
 
   // Make sure MCU fits in
