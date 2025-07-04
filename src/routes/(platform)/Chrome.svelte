@@ -55,7 +55,7 @@
 {/if}
 <div class="background" class:overviewing style:--background-scale={backgroundScale}></div>
 {#if browser}
-  <div class="dock-area">
+  <div class="dock-area" inert={!overviewing}>
     {#if unavailableApps.length}
       {#if !require(storage, "authorization")}
         <button
@@ -92,7 +92,7 @@
         </button>
       {/if}
     {/if}
-    <div class="dock" inert={!overviewing}>
+    <div class="dock">
       <!-- todo: customization -->
       {#each dock as app (app.name)}
         <button
