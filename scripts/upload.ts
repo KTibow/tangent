@@ -96,7 +96,7 @@ async function process(
 
 // Step 1: Clear existing files
 console.log("Clearing existing files...");
-for (const path of ["client", "server", "prerendered"]) {
+for (const path of ["client", "chunks", "prerendered"]) {
   const response = await fetch(
     `https://api.val.town/v2/vals/${VAL_ID}/files?path=${path}&recursive=true`,
     {
@@ -172,7 +172,7 @@ for (const file of filesToUpload) {
   let uploadResponse: Response;
   if (
     file.valPath.startsWith("client") ||
-    file.valPath.startsWith("server") ||
+    file.valPath.startsWith("chunks") ||
     file.valPath.startsWith("prerendered")
   ) {
     uploadResponse = await upload("POST");
