@@ -1,6 +1,6 @@
-import { writeFileSync, readFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { build } from "npm:esbuild";
+import { rolldown } from "npm:rolldown";
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);
 
@@ -19,7 +19,9 @@ export default function (opts = {}) {
 
       // Copy client assets and prerendered pages
       builder.writeClient(`${out}/client${builder.config.kit.paths.base}`);
-      builder.writePrerendered(`${out}/prerendered${builder.config.kit.paths.base}`);
+      builder.writePrerendered(
+        `${out}/prerendered${builder.config.kit.paths.base}`,
+      );
 
       // Write server files to temp directory
       builder.writeServer(tmp);
@@ -27,9 +29,11 @@ export default function (opts = {}) {
       // Make the actual server
       writeFileSync(
         `${tmp}/manifest.js`,
-        `export default ${builder.generateManifest({
-          relativePath: "./",
-        })};`,
+        `export default ${
+          builder.generateManifest({
+            relativePath: "./",
+          })
+        };`,
       );
       writeFileSync(
         `${tmp}/base_path.js`,
@@ -47,15 +51,14 @@ export default function (opts = {}) {
       // Bundle the server
       builder.log.minor("Bundling server");
 
-      await build({
-        entryPoints: [`${tmp}/val.js`],
-        outdir: out,
-        format: "esm",
-        splitting: true,
-        bundle: true,
+      const bundle = await rolldown({
+        input: `${tmp}/val.js`,
+        treeshake: true,
+      });
+      await bundle.write({
+        dir: out,
         minify: true,
-        treeShaking: true,
-        chunkNames: "chunks/[name]-[hash]",
+        chunkFileNames: "chunks/[name]-[hash].js",
       });
 
       builder.log.minor("Generated Val Town HTTP handler");
