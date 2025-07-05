@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { rolldown } from "npm:rolldown";
+import { rolldown } from "npm:rolldown@1.0.0-beta.23"; // TODO: once https://github.com/oxc-project/oxc/issues/12086 is resolved, upgrade this and package.json
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);
 
@@ -19,9 +19,7 @@ export default function (opts = {}) {
 
       // Copy client assets and prerendered pages
       builder.writeClient(`${out}/client${builder.config.kit.paths.base}`);
-      builder.writePrerendered(
-        `${out}/prerendered${builder.config.kit.paths.base}`,
-      );
+      builder.writePrerendered(`${out}/prerendered${builder.config.kit.paths.base}`);
 
       // Write server files to temp directory
       builder.writeServer(tmp);
@@ -29,11 +27,9 @@ export default function (opts = {}) {
       // Make the actual server
       writeFileSync(
         `${tmp}/manifest.js`,
-        `export default ${
-          builder.generateManifest({
-            relativePath: "./",
-          })
-        };`,
+        `export default ${builder.generateManifest({
+          relativePath: "./",
+        })};`,
       );
       writeFileSync(
         `${tmp}/base_path.js`,
