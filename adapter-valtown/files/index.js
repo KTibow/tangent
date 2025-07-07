@@ -1,7 +1,5 @@
 import base_path from "BASE_PATH";
 
-let isColdStart = true;
-
 let serverPromise = (async () => {
   const [{ Server }, { default: manifest }] = await Promise.all([
     import("SERVER"),
@@ -34,7 +32,6 @@ const getContentType = (filePath) => {
 };
 
 export default async function (request) {
-  isColdStart = false;
   const url = new URL(request.url);
 
   let pathname = url.pathname;
@@ -64,7 +61,6 @@ export default async function (request) {
       (pathname.endsWith(".html") ? "prerendered" : "client") +
       pathname;
 
-    const perfStart = performance.now();
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${Deno.env.get("valtown")}`,
@@ -81,8 +77,6 @@ export default async function (request) {
     if (pathname.startsWith("/_app/immutable/")) {
       headers.set("cache-control", "public,max-age=31536000,immutable");
     }
-    headers.set("x-cold-start", JSON.stringify(isColdStart));
-    headers.set("x-data-time", JSON.stringify(performance.now() - perfStart));
     return new Response(response.body, {
       status: response.status,
       headers,
