@@ -49,6 +49,11 @@ jobs:
         run: deno install
 
       - name: Check
+        env:
+          DISCORD_KEY: ${{ secrets.DISCORD_KEY }}
+          CHAT_WEBHOOK: ${{ secrets.CHAT_WEBHOOK }}
+          FEEDBACK_WEBHOOK: ${{ secrets.FEEDBACK_WEBHOOK }}
+          JWT_KEY: ${{ secrets.JWT_KEY }}
         run: deno task check
 
       - name: Lint
