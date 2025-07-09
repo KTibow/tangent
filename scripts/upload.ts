@@ -20,9 +20,6 @@ async function process(
     return undefined; // Don't upload
   }
 
-  const js = (strings: TemplateStringsArray, ...values: string[]) =>
-    String.raw({ raw: strings }, ...values);
-
   // Process val.js (HTTP val entry point)
   if (normalizedPath === "val.js") {
     // The adapter already generates the HTTP val entry point, just mark it as http type
