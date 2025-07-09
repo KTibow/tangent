@@ -40,7 +40,7 @@
 </script>
 
 <div class="bar">
-  {#each calculateWidths(assignments, categories) as { name, percent, weight }}
+  {#each calculateWidths(assignments, categories) as { name, percent, weight }, i (i)}
     {@const adjustedPercent = (percent - 0.4) / 0.6}
     <div
       style:flex-basis="{weight * 100}%"

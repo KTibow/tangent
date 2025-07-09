@@ -1,5 +1,5 @@
-import adapter from "./adapter-valtown/index.js";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import adapter from "./adapter-valtown/index.js";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

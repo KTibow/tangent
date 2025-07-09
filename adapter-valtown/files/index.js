@@ -81,7 +81,9 @@ export default async function (request) {
       status: response.status,
       headers,
     });
-  } catch {}
+  } catch {
+    // and then...
+  }
 
   // Handle everything else with SvelteKit SSR
   const server = await serverPromise;

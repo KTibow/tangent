@@ -1,12 +1,12 @@
 <script lang="ts">
   import iconCheck from "@ktibow/iconset-material-symbols/check-rounded";
   import { Button } from "m3-svelte";
+  import districts from "school-districts";
   import { tick } from "svelte";
   import Icon from "$lib/Icon.svelte";
   import { send } from "$lib/sdk/comms-app";
   import { AUTH_PATH, getStorage } from "$lib/sdk/storage";
   import EmailInput from "./EmailInput.svelte";
-  import districts from "school-districts";
 
   const storage = getStorage();
   let auth = $derived(storage[AUTH_PATH]);
