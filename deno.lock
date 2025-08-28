@@ -2774,6 +2774,16 @@
       "integrity": "sha512-rAbqEGa8ovJy4pyBxZM70hg4pE6gDgaQ0Sl9M3enG3I0d6H4XSAM3GeNGLKnsBpuijUow064sf7ww1nutC5/3w=="
     }
   },
+  "redirects": {
+    "https://esm.town/v/std/API_URL": "https://esm.town/v/std/API_URL?v=5",
+    "https://esm.town/v/std/fetch": "https://esm.town/v/std/fetch?v=5",
+    "https://esm.town/v/std/rawFetch": "https://esm.town/v/std/rawFetch?v=1"
+  },
+  "remote": {
+    "https://esm.town/v/std/API_URL?v=5": "46109f905a50e32281d3ffbe7b9c8209a778290c5274d83d131fba2d26c4974d",
+    "https://esm.town/v/std/fetch?v=5": "8695c3ffadbd7cfa4f64532253000f4ecca82f1f133bd62feecb400bdef7c576",
+    "https://esm.town/v/std/rawFetch?v=1": "70ef4b504471704d106cdf25e0d452bfa00b9b1f99f9006c17241f12736bef1f"
+  },
   "workspace": {
     "packageJson": {
       "dependencies": [
