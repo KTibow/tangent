@@ -1,4 +1,3 @@
-import { dev } from "$app/environment";
 import { DISCORD_KEY } from "$env/static/private";
 
 const loadFetch = async (): Promise<typeof fetch> => {

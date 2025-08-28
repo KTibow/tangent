@@ -1,4 +1,4 @@
-import { CHAT_WEBHOOK, DISCORD_KEY } from "$env/static/private";
+import { CHAT_WEBHOOK } from "$env/static/private";
 import discord, { webhook } from "$lib/api/discord";
 import type { PageServerLoad } from "./$types";
 
