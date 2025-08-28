@@ -43,7 +43,7 @@ declare module "pbf-esm" {
     skip(val: number): void;
     writeTag(tag: number, type: number): void;
     realloc(min: number): void;
-    finish(): Uint8Array;
+    finish(): Uint8Array<ArrayBuffer>;
     writeFixed32(val: number): void;
     writeSFixed32(val: number): void;
     writeFixed64(val: number): void;

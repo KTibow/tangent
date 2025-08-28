@@ -103,7 +103,10 @@ export default class {
   private async getSignature(datestamp: string, stringToSign: string): Promise<string> {
     const encoder = new TextEncoder();
 
-    async function hmac(key: Uint8Array, data: Uint8Array): Promise<ArrayBuffer> {
+    async function hmac(
+      key: Uint8Array<ArrayBuffer>,
+      data: Uint8Array<ArrayBuffer>,
+    ): Promise<ArrayBuffer> {
       const cryptoKey = await crypto.subtle.importKey(
         "raw",
         key,
@@ -114,7 +117,7 @@ export default class {
       return await crypto.subtle.sign("HMAC", cryptoKey, data);
     }
 
-    async function stackedHmac(datas: Uint8Array[]) {
+    async function stackedHmac(datas: Uint8Array<ArrayBuffer>[]) {
       let key = datas.shift()!;
       while (true) {
         const data = datas.shift();

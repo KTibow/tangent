@@ -6,7 +6,7 @@ type Input = {
     text: string;
   };
 };
-export default (obj: Input): Uint8Array => {
+export default (obj: Input) => {
   const pbf = new Pbf();
   pbf.writeStringField(2, obj.conversationId);
   pbf.writeMessage(3, MessageData, obj);

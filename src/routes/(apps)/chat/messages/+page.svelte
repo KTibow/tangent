@@ -89,7 +89,7 @@
         controller: AbortController;
         me: string;
         listeners: Listener[];
-        encrypt: (data: Uint8Array) => Promise<Uint8Array>;
+        encrypt: (data: Uint8Array<ArrayBuffer>) => Promise<Uint8Array>;
       }
     | undefined = $state();
   const callRefresh = async () => {
@@ -173,7 +173,7 @@
           type: ActionType.LIST_CONVERSATIONS,
         },
       ],
-      async encrypt(data: Uint8Array) {
+      async encrypt(data) {
         const iv = crypto.getRandomValues(new Uint8Array(16));
         const encryptedData = new Uint8Array(
           await crypto.subtle.encrypt({ name: "AES-CTR", counter: iv, length: 64 }, aesKey, data),

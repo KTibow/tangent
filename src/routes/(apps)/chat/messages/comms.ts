@@ -27,8 +27,8 @@ export async function connect(
   callbacks: {
     pair?: (payload: ReturnType<typeof InStreamPair>) => void;
     data?: (
-      body: Uint8Array,
-      iv: Uint8Array,
+      body: Uint8Array<ArrayBuffer>,
+      iv: Uint8Array<ArrayBuffer>,
       meta: { id: string; requestId: string; action: ActionType },
     ) => void;
   },
