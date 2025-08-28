@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { Button } from "m3-svelte";
+  import { tick } from "svelte";
   import { storage } from "$lib/sdk/_storage-app.svelte";
   import { send } from "$lib/sdk/comms-app";
   import { VERIFICATION_PATH } from "$lib/sdk/storage";
-  import { Button } from "m3-svelte";
-  import { tick } from "svelte";
 
   let v = $derived(storage[VERIFICATION_PATH]);
 

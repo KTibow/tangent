@@ -1,6 +1,5 @@
 <script>
   import { Layer } from "m3-svelte";
-  import { isLikelyFiltered } from "$lib";
   import BoxFloating from "$lib/BoxFloating.svelte";
   import MessagesTemplate from "../MessagesTemplate.svelte";
 
