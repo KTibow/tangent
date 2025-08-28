@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { rolldown } from "npm:rolldown";
+import { rolldown } from "rolldown";
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);
 
