@@ -4,7 +4,7 @@
   import MessagesTemplate from "../MessagesTemplate.svelte";
 
   let { data } = $props();
-  let me = $state("TODO: name");
+  let me = $state("Online visitor");
 
   let ps = $derived({
     isDiscord: true,
