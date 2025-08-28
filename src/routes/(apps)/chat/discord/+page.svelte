@@ -17,11 +17,7 @@
 </script>
 
 {#snippet menu()}
-  {#if isLikelyFiltered}
-    <p>This is a portal to Discord - https://discord.gg/KXFh6rP86W</p>
-  {:else}
-    <p>This is a portal to <a target="_blank" href="https://discord.gg/KXFh6rP86W">Discord</a></p>
-  {/if}
+  <p>This is a portal to Discord</p>
   <a href="/chat/messages">
     <Layer />
     Portal to Google Messages
