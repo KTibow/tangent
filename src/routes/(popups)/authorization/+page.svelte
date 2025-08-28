@@ -14,7 +14,16 @@
 
   let email = $state("");
   let password = $state("");
-  // TODO: demo user
+
+  const demo = async () => {
+    storage[AUTH_PATH] = JSON.stringify({
+      email: "demo@example.com",
+      password: "not_real_password",
+    });
+    await tick();
+    await tick();
+    send!({ type: "close" });
+  };
 </script>
 
 <h2 class="m3-font-headline-large">Authorization</h2>
@@ -47,6 +56,10 @@
     />
     <Button variant="filled">Store</Button>
   </form>
+  <p>For this demo, you can just hit this button to log in.</p>
+  <div>
+    <Button onclick={demo}>Log in as a demo user</Button>
+  </div>
   <p class="note">
     Tangent currently supports {districtCount}
     {districtCount == 1 ? "district" : "districts"}.

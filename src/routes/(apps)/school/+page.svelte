@@ -91,6 +91,7 @@
 
   let period = $state(1);
   let gradesOpen = $state(false);
+  // TODO: demo data
 </script>
 
 <p style:margin-block-start="auto" style:margin-inline="auto">
