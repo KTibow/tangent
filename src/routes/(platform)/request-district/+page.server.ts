@@ -1,5 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { FEEDBACK_WEBHOOK } from "$env/static/private";
+import { webhook } from "$lib/api/discord";
 
 export const actions = {
   default: async ({ request }) => {
@@ -8,16 +9,7 @@ export const actions = {
     if (!domain) error(400);
 
     const message = `> Add support for ${domain}`;
-    const r = await fetch(FEEDBACK_WEBHOOK, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        content: message,
-      }),
-    });
-    if (!r.ok) throw new Error(`Discord is ${r.status}ing`);
+    webhook(FEEDBACK_WEBHOOK, { content: message });
 
     return { sent: true };
   },

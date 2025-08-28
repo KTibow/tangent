@@ -1,0 +1,40 @@
+import { dev } from "$app/environment";
+import { DISCORD_KEY } from "$env/static/private";
+
+const loadFetch = async (): typeof fetch => {
+  if (Deno.env.get("VAL_TOWN_API_KEY")) {
+    const { fetch } = await import("https://esm.town/v/std/fetch");
+    return fetch;
+  } else {
+    return fetch;
+  }
+};
+export const webhook = async (url: string, body: any) => {
+  const fetchUsed = await loadFetch();
+  const r = await fetchUsed(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body,
+  });
+  if (!r.ok) {
+    console.error(await r.text());
+    throw new Error(`Discord's ${r.status}ing`);
+  }
+};
+export default async <T>(path: string, init: RequestInit = {}) => {
+  const fetchUsed = await loadFetch();
+  const r = await fetchUsed(`https://discord.com/api/v10/${path}`, {
+    ...init,
+    headers: {
+      ...init.headers,
+      authorization: `Bot ${DISCORD_KEY}`,
+    },
+  });
+  if (!r.ok) {
+    console.error(await r.text());
+    throw new Error(`${path}'s ${r.status}ing`);
+  }
+  return await r.json<T>();
+};

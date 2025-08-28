@@ -1,4 +1,5 @@
 import { CHAT_WEBHOOK, DISCORD_KEY } from "$env/static/private";
+import discord, { webhook } from "$lib/api/discord";
 import type { PageServerLoad } from "./$types";
 
 const discordMappings: Record<string, string> = {
@@ -23,15 +24,7 @@ const replacePingsWithNames = (text: string): string => {
 };
 
 const read = async (id: string) => {
-  const r = await fetch(`https://discord.com/api/v10/channels/${id}/messages`, {
-    headers: {
-      authorization: `Bot ${DISCORD_KEY}`,
-    },
-  });
-  if (!r.ok) {
-    throw new Error(`Discord is ${r.status}ing`);
-  }
-  const data = (await r.json()) as any[];
+  const data: any[] = await discord(`channels/${id}/messages`);
   const parsed = data.map((m) => ({
     id: m.id,
     timestamp: new Date(m.timestamp),
@@ -61,16 +54,6 @@ export const actions = {
     const content = formData.get("content");
     if (!content) return;
 
-    const r = await fetch(`${CHAT_WEBHOOK}?wait=true`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        content,
-      }),
-    });
-    if (!r.ok) throw new Error(`Discord is ${r.status}ing`);
+    webhook(`${CHAT_WEBHOOK}?wait=true`, { username, content });
   },
 };
