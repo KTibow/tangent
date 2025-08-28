@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { rolldown } from "npm:rolldown"; // TODO: once https://github.com/oxc-project/oxc/issues/12086 is resolved, upgrade this and package.json
+import { rolldown } from "npm:rolldown";
 
 const files = fileURLToPath(new URL("./files", import.meta.url).href);
 
