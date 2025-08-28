@@ -17,7 +17,7 @@ export const webhook = async (url: string, body: any) => {
     headers: {
       "content-type": "application/json",
     },
-    body,
+    body: JSON.stringify(body),
   });
   if (!r.ok) {
     console.error(await r.text());
