@@ -14,6 +14,6 @@ export const actions = {
       .map((l) => `> ${l}`)
       .join("\n")
       .slice(0, 2000);
-    webhook(FEEDBACK_WEBHOOK, { content: message });
+    await webhook(FEEDBACK_WEBHOOK, { content: message });
   },
 };

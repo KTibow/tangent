@@ -9,7 +9,7 @@ export const actions = {
     if (!domain) error(400);
 
     const message = `> Add support for ${domain}`;
-    webhook(FEEDBACK_WEBHOOK, { content: message });
+    await webhook(FEEDBACK_WEBHOOK, { content: message });
 
     return { sent: true };
   },

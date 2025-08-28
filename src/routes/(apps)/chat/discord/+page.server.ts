@@ -54,6 +54,6 @@ export const actions = {
     const content = formData.get("content");
     if (!content) return;
 
-    webhook(`${CHAT_WEBHOOK}?wait=true`, { username, content });
+    await webhook(`${CHAT_WEBHOOK}?wait=true`, { username, content });
   },
 };
