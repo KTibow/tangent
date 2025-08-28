@@ -26,6 +26,7 @@ export const simplifyClassName = /* @__PURE__ */ (name: string) => {
   if (name.includes("wind ensemble")) return "Music";
 
   if (name.includes("academic lab")) return "Academic Lab";
+  if (name.includes("adv prog")) return "Programming";
   if (name.includes("advisory")) return "Advisory";
   if (name.includes("aerospace")) return "Aerospace";
   if (name.includes("animation")) return "Animation";

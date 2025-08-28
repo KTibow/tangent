@@ -14,6 +14,7 @@
 
   let email = $state("");
   let password = $state("");
+  // TODO: demo user
 </script>
 
 <h2 class="m3-font-headline-large">Authorization</h2>

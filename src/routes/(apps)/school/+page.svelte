@@ -93,7 +93,13 @@
   let gradesOpen = $state(false);
 </script>
 
-<!-- TODO: dashboard -->
+<p style:margin-block-start="auto" style:margin-inline="auto">
+  {#if clazz}
+    This class is called {clazz.name}.
+  {:else}
+    No class is selected.
+  {/if}
+</p>
 <div class="controls">
   {#if clazz}
     {@const prevClass = classes.findLast((c) => c.period < clazz.period)}
