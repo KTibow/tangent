@@ -1,8 +1,10 @@
 import { dev } from "$app/environment";
 import { DISCORD_KEY } from "$env/static/private";
 
-const loadFetch = async (): typeof fetch => {
+const loadFetch = async (): Promise<typeof fetch> => {
+  // @ts-expect-error you're not val town
   if (Deno.env.get("VAL_TOWN_API_KEY")) {
+    // @ts-expect-error you're not val town
     const { fetch } = await import("https://esm.town/v/std/fetch");
     return fetch;
   } else {
@@ -36,5 +38,5 @@ export default async <T>(path: string, init: RequestInit = {}) => {
     console.error(await r.text());
     throw new Error(`${path}'s ${r.status}ing`);
   }
-  return await r.json<T>();
+  return (await r.json()) as T;
 };
