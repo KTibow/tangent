@@ -136,7 +136,7 @@ ${darkColors}
   <Button
     variant="text"
     disabled={!storage[STYLE_PATH]}
-    click={() => {
+    onclick={() => {
       color = DEFAULT_COLOR;
       delete storage[STYLE_PATH];
     }}

@@ -87,7 +87,7 @@
   <Interruption icon={iconCable} headline="Link Google Messages">
     In Messages, tap on your profile, go to device pairing, and open the QR code scanner.
     {#snippet buttons()}
-      <Button variant="filled" click={genCode}>Continue</Button>
+      <Button variant="filled" onclick={genCode}>Continue</Button>
     {/snippet}
   </Interruption>
 {/if}
