@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        font-family:
+          Inter Variable,
+          system-ui,
+          sans-serif;
+
+        @media (prefers-color-scheme: dark) {
+          color-scheme: dark;
+          background-color: rgb(31 3 30);
+          color: rgb(255 219 246);
+        }
+      }
+      h1,
+      h2,
+      h3 {
+        margin: 0 0 0.5em 0;
+      }
+      p {
+        margin: 0;
+        white-space: nowrap;
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <p style="position: absolute; left: 50%; top: 50%; translate: -50% -50%">
+      This is a proof of concept for how something like a web browser could be
+      integrated in something like Tangent.
+    </p>
+    <p style="position: absolute; left: 8rem; bottom: 2rem">Try viewing example.com</p>
+    <p style="position: absolute; left: 8rem; bottom: 0">↓</p>
+  </body>
+</html>
