@@ -38,14 +38,14 @@
   const storage = getStorage();
 
   let iframe: HTMLIFrameElement | undefined = $state();
-  let isReady = $state(false);
+  let readyCount = $state(0);
 
   let { listen, send } = $derived(connect(iframe));
 
   $effect(() => {
     listen((data) => {
       if (data.type == "ready") {
-        isReady = true;
+        readyCount++;
       } else if (data.type == "close") {
         close();
       } else if (data.type == "launch") {
@@ -63,7 +63,7 @@
     });
   });
   $effect(() => {
-    if (isReady) {
+    if (readyCount) {
       send({ storage: $state.snapshot(storage) });
     }
   });
