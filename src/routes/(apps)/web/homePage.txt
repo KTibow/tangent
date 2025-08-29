@@ -4,14 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-
-        align-items: center;
-        justify-content: center;
-
+      :root {
         font-family:
           Inter Variable,
           system-ui,
@@ -19,9 +12,18 @@
 
         @media (prefers-color-scheme: dark) {
           color-scheme: dark;
-          background-color: rgb(31 3 30);
-          color: rgb(255 219 246);
         }
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-height: 100dvh;
+        line-height: 1;
+        overflow: clip clip;
+
+        align-items: center;
+        justify-content: center;
       }
       h1,
       h2,
@@ -43,11 +45,11 @@
       integrated in something like Tangent.
     </p>
     <p>
-      Websites that ban iframes don't work here. If this version of Tangent
-      takes off, rewriters will be added to fix this.
+      Websites that ban iframes don't work here. If this takes off,
+      rewriters (think scramjet) will be added to fix this.
     </p>
     <p style="position: absolute; left: 8rem; bottom: 2rem">
-      Try viewing example.com
+      Try viewing example.com or running Tangent inside Tangent
     </p>
     <p style="position: absolute; left: 8rem; bottom: 0">↓</p>
   </body>
