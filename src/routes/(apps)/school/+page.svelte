@@ -96,7 +96,7 @@
 
 <p style:margin-block-start="auto" style:margin-inline="auto">
   {#if clazz}
-    You might see quick links for {clazz.name} here in the future.
+    Quick links for {clazz.name} will show here in the future.
   {:else}
     No class is selected.
   {/if}
