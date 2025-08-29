@@ -69,6 +69,12 @@ export default ts.config(
       ],
       "svelte/no-at-html-tags": "off",
       "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/ban-ts-comment": [
+        "error",
+        {
+          "ts-nocheck": false,
+        },
+      ],
     },
   },
 );

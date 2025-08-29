@@ -55,17 +55,10 @@ export default async function (request) {
       });
     }
 
-    const url =
-      import.meta.url.split("/").slice(0, -1).join("/") +
-      "/" +
-      (pathname.endsWith(".html") ? "prerendered" : "client") +
-      pathname;
+    const r2Path = (pathname.endsWith(".html") ? "prerendered" : "client") + pathname;
+    const r2Url = `https://pub-23f47e337ab74ec4af6bfac7f2c44a01.r2.dev/${r2Path}`;
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${Deno.env.get("valtown")}`,
-      },
-    });
+    const response = await fetch(r2Url);
 
     if (!response.ok) {
       throw new Error(`continue: asset ${response.status}`);

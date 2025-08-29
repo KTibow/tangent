@@ -8,5 +8,8 @@ export default defineConfig({
     minifyIdentifiers: false,
     legalComments: "none",
   },
+  build: {
+    assetsInlineLimit: 2048,
+  },
   plugins: [sveltekit(), devtoolsJson(), webAssets()],
 });

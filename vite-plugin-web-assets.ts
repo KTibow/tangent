@@ -1,5 +1,4 @@
-import { readFile } from "node:fs/promises";
-import { resolve } from "node:path";
+// @ts-nocheck
 import type { Plugin } from "vite";
 
 // Note: this plugin only works for build purposes
@@ -30,9 +29,11 @@ export default function (): Plugin {
       // First pass: emit all web assets and build the asset map
       await Promise.all(
         assets.map(async (assetFile) => {
-          const assetPath = resolve(assetsPath, assetFile);
+          const assetPath = `${assetsPath}/${assetFile}`;
 
-          const content = await readFile(assetPath, "utf-8");
+          const content = assetPath.endsWith("js")
+            ? await Deno.readTextFile(assetPath)
+            : await Deno.readFile(assetPath);
 
           const hashedName = this.emitFile({
             type: "asset",

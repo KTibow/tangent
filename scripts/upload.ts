@@ -1,10 +1,19 @@
 import fs from "node:fs";
 import path from "node:path";
 import { transform } from "npm:esbuild";
+import S3Client from "../src/lib/api/s3.ts";
 
 const VAL_TOWN_API_KEY = Deno.env.get("VAL_KEY");
 const VAL_ID = "90e4bf82-2766-11f0-86ff-569c3dd06744";
 const BUILD_DIR = "./build";
+
+// R2 setup
+const r2 = new S3Client(
+  Deno.env.get("R2_ENDPOINT")!,
+  Deno.env.get("R2_BUCKET")!,
+  Deno.env.get("R2_ACCESS_KEY_ID")!,
+  Deno.env.get("R2_SECRET_ACCESS_KEY")!,
+);
 
 console.log("Starting upload...");
 
@@ -92,19 +101,15 @@ async function process(
 // ======================
 
 // Step 1: Clear existing files
-console.log("Clearing existing files...");
-for (const path of ["client", "chunks", "prerendered"]) {
-  const response = await fetch(
-    `https://api.val.town/v2/vals/${VAL_ID}/files?path=${path}&recursive=true`,
-    {
-      method: "DELETE",
-      headers: {
-        authorization: `Bearer ${VAL_TOWN_API_KEY}`,
-      },
-    },
-  );
-  if (![204, 404].includes(response.status)) {
-    throw new Error(`Failed to clear files: ${response.statusText}`);
+if (!Deno.env.get("R2_ACCESS_KEY_ID")) {
+  throw new Error("R2_ACCESS_KEY_ID required");
+}
+
+console.log("Clearing R2 assets...");
+const files = await r2.listFiles();
+for (const file of files.files) {
+  if (file.type === "file") {
+    await r2.deleteFile(file.name);
   }
 }
 
@@ -133,16 +138,36 @@ function getAllFiles(dir: string, baseDir: string = dir): FileToUpload[] {
   return files;
 }
 
-const filesToUpload = getAllFiles(BUILD_DIR);
-console.log(`Found ${filesToUpload.length} files to upload`);
+const allFiles = getAllFiles(BUILD_DIR);
 
-// Step 3: Upload each file
-for (const file of filesToUpload) {
+// Split files between R2 (assets) and Val Town (server + chunks)
+const assetFiles = allFiles.filter(
+  (file) => file.valPath.startsWith("client/") || file.valPath.startsWith("prerendered/"),
+);
+
+const serverFiles = allFiles.filter(
+  (file) => !file.valPath.startsWith("client/") && !file.valPath.startsWith("prerendered/"),
+);
+
+console.log(
+  `Found ${allFiles.length} files: ${assetFiles.length} assets, ${serverFiles.length} server files`,
+);
+
+// Step 3: Upload assets to R2
+console.log("Uploading assets to R2...");
+for (const file of assetFiles) {
+  console.log(`Uploading ${file.valPath} to R2...`);
+  const content = fs.readFileSync(file.localPath);
+  await r2.putFile(file.valPath, content);
+}
+console.log("R2 upload complete!");
+
+// Step 4: Upload server files to Val Town
+console.log("Uploading server files to Val Town...");
+for (const file of serverFiles) {
   console.log(`Processing ${file.valPath} (${file.localPath})...`);
 
   const originalContent = fs.readFileSync(file.localPath, "utf8");
-
-  // Apply processing
   const processed = await process(file.valPath, originalContent);
   if (processed === undefined) {
     console.log(`Skipping ${file.valPath} (filtered out by processing)`);
@@ -166,18 +191,10 @@ for (const file of filesToUpload) {
         }),
       },
     );
-  let uploadResponse: Response;
-  if (
-    file.valPath.startsWith("client") ||
-    file.valPath.startsWith("chunks") ||
-    file.valPath.startsWith("prerendered")
-  ) {
+
+  let uploadResponse = await upload("PUT");
+  if (!uploadResponse.ok) {
     uploadResponse = await upload("POST");
-  } else {
-    uploadResponse = await upload("PUT");
-    if (!uploadResponse.ok) {
-      uploadResponse = await upload("POST");
-    }
   }
 
   if (!uploadResponse.ok) {

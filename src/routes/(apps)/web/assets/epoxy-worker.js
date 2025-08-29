@@ -1,4 +1,4 @@
-// <data:text/javascript;base64,CmV4cG9ydCBmdW5jdGlvbiB3c19wcm90b2Nv...>
+// @ts-nocheck
 function ws_protocol() {
   return ("10000000-1000-4000-8000" + -1e11).replace(/[018]/g, (c) =>
     (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16),

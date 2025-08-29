@@ -1,6 +1,7 @@
-# Package Managers
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
 bun.lock
 bun.lockb
+src/routes/(apps)/web/assets/scramjet.*
+src/routes/(apps)/web/assets/*worker.js

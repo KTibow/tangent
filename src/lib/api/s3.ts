@@ -179,7 +179,7 @@ export default class {
     return await response.text();
   }
 
-  async putFile(path: string, content: string) {
+  async putFile(path: string, content: BodyInit) {
     await this.fetch(path, {
       method: "PUT",
       body: content,

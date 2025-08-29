@@ -1,5 +1,7 @@
+// @ts-nocheck
 importScripts("WEB_ASSET(scramjet.all.js)");
 
+const { ScramjetServiceWorker } = globalThis.$scramjetLoadWorker();
 const scramjet = new ScramjetServiceWorker();
 
 /**
