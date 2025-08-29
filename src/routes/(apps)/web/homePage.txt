@@ -41,15 +41,11 @@
   </head>
   <body>
     <p>
-      This is a proof of concept for how something like a web browser could be
-      integrated in something like Tangent.
+      This is something like a web browser. To make sure it works, it uses the Scramjet rewriter and the Space network server.
     </p>
-    <p>
-      Websites that ban iframes don't work here. If this takes off,
-      rewriters (think scramjet) will be added to fix this.
-    </p>
+    <p>Don't abuse Web.</p>
     <p style="position: absolute; left: 8rem; bottom: 2rem">
-      Try viewing example.com or running Tangent inside Tangent
+      Use Web
     </p>
     <p style="position: absolute; left: 8rem; bottom: 0">↓</p>
   </body>

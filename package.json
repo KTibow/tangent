@@ -21,6 +21,7 @@
     "@iconify/types": "^2.0.0",
     "@ktibow/iconset-material-symbols": "^0.0.1755063979",
     "@ktibow/material-color-utilities-nightly": "^0.3.11756343896616",
+    "@mercuryworkshop/bare-mux": "^2.1.7",
     "@sveltejs/adapter-node": "^5.3.1",
     "@sveltejs/kit": "^2.36.3",
     "@sveltejs/vite-plugin-svelte": "^6.1.3",

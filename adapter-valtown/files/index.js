@@ -77,6 +77,9 @@ export default async function (request) {
     if (pathname.startsWith("/_app/immutable/")) {
       headers.set("cache-control", "public,max-age=31536000,immutable");
     }
+    if (pathname.includes("the-sw")) {
+      headers.set("service-worker-allowed", "/");
+    }
     return new Response(response.body, {
       status: response.status,
       headers,
